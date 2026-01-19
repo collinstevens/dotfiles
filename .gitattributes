@@ -1,0 +1,6 @@
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+iterm2/com.googlecode.iterm2.plist -text
