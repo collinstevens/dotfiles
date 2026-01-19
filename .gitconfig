@@ -1,0 +1,46 @@
+[user]
+	email = git@collinstevens.com
+	name = Collin Stevens
+	signingkey = ~/.ssh/id_ed25519
+
+[core]
+	autoclrf = false
+	editor = vim
+
+[init]
+	defaultBranch = master
+
+[pull]
+	ff = only
+
+[push]
+	autoSetupRemote = true
+	useForceIfIncludes = true
+
+[rebase]
+	autoSquash = true
+	updateRefs = true
+
+[rerere]
+	enabled = true
+
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	rap = "!f(){ b=$(git symbolic-ref --quiet --short HEAD) || return; git fetch origin \"$b\" && git reset --hard \"origin/$b\"; }; f"
+	acp = "!f(){ git add -A && git commit --amend --no-edit && git push --force-with-lease; }; f"
+	pl = !git fetch -p && git branch -vv | grep \": gone]\" | awk \"{print \\$1}\" | xargs -r git branch -D
+
+[fetch]
+	prune = true
+
+[gpg]
+	format = ssh
+
+[commit]
+	gpgsign = true
+
+[includeIf "gitdir/i:C:/"]
+    path = ~/.gitconfig-windows
+
+[includeIf "gitdir:/home/"]
+    path = ~/.gitconfig-linux
