@@ -4,7 +4,7 @@
 	signingkey = ~/.ssh/id_ed25519
 
 [core]
-	autoclrf = false
+	autocrlf = true
 	editor = vim
 
 [init]
