@@ -1,0 +1,31 @@
+$ErrorActionPreference = "Stop"
+
+$links = @(
+    @{ Source = ".gitconfig"; Target = "$HOME\.gitconfig" },
+    @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
+    @{ Source = ".gitignore-global"; Target = "$HOME\.gitignore-global" }
+)
+
+foreach ($link in $links) {
+    $sourceFile = Join-Path $PSScriptRoot $link.Source
+    $target = $link.Target
+
+    if (-not (Test-Path $sourceFile)) {
+        Write-Error "Error: Source file not found: $sourceFile"
+        exit 1
+    }
+
+    if (Test-Path $target) {
+        Remove-Item $target -Force
+        Write-Host "Removed existing: $target"
+    }
+
+    $targetDir = Split-Path -Parent $target
+    if (-not (Test-Path $targetDir)) {
+        New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+    }
+    Copy-Item -Path $sourceFile -Destination $target
+    Write-Host "Copied: $sourceFile -> $target"
+}
+
+Write-Host "Done."
