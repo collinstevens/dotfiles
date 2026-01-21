@@ -19,8 +19,8 @@ foreach ($link in $links) {
         Write-Host "Removed existing: $target"
     }
 
-    New-Item -ItemType SymbolicLink -Path $target -Target $sourceFile | Out-Null
-    Write-Host "Linked: $target -> $sourceFile"
+    Copy-Item -Path $sourceFile -Destination $target
+    Write-Host "Copied: $sourceFile -> $target"
 }
 
 Write-Host "Done."

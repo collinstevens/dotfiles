@@ -23,8 +23,8 @@ for link in "${links[@]}"; do
         echo "Removed existing: $target"
     fi
 
-    ln -s "$source_file" "$target"
-    echo "Linked: $target -> $source_file"
+    cp "$source_file" "$target"
+    echo "Copied: $source_file -> $target"
 done
 
 echo "Done."
