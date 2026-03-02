@@ -88,6 +88,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
+eval "$(gh completion -s bash)"
+
 [[ -x "$HOME/.local/bin/mise" ]] && eval "$("$HOME/.local/bin/mise" activate bash)"
 
 SSH_ENV="$HOME/.ssh/agent-environment"
