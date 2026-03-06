@@ -134,3 +134,5 @@ export PATH="$HOME/.opencode/bin:$PATH"
 
 # Amp CLI
 export PATH="$HOME/.amp/bin:$PATH"
+
+PS1='\[\e[01;32m\]\w\[\e[00m\]\$ '
