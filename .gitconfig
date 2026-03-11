@@ -28,7 +28,7 @@
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	rap = "!f(){ b=$(git symbolic-ref --quiet --short HEAD) || return; git fetch origin \"$b\" && git reset --hard \"origin/$b\"; }; f"
 	acp = "!f(){ git add -A && git commit --amend --no-edit && git push --force-with-lease; }; f"
-	ac = "!f(){ git add -A && git commit --amend --no-edit }; f"
+	ac = "!f(){ git add -A && git commit --amend --no-edit; }; f"
 	pl = !git fetch -p && git branch -vv | grep \": gone]\" | awk \"{print \\$1}\" | xargs -r git branch -D
 
 [fetch]
