@@ -5,6 +5,14 @@ $links = @(
     @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" }
 )
 
+$pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
+if ($pkg) {
+    $wtSettingsTarget = Join-Path $env:LOCALAPPDATA "Packages\$($pkg.PackageFamilyName)\LocalState\settings.json"
+} else {
+    $wtSettingsTarget = Join-Path $env:LOCALAPPDATA "Microsoft\Windows Terminal\settings.json"
+}
+$links += @{ Source = "windows-terminal\settings.json"; Target = $wtSettingsTarget }
+
 foreach ($link in $links) {
     $sourceFile = Join-Path $PSScriptRoot $link.Source
     $target = $link.Target
