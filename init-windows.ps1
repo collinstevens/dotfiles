@@ -39,6 +39,50 @@ function Copy-WslSystemFile {
     Write-Host "Copied: $sourceFile -> wsl:$Target"
 }
 
+$hackInstalled = $false
+$hackFontRegistryName = "HackNerdFont-Regular (TrueType)"
+$fontRegistryPaths = @(
+    "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts",
+    "HKLM:\Software\Microsoft\Windows NT\CurrentVersion\Fonts"
+)
+
+foreach ($fontRegistryPath in $fontRegistryPaths) {
+    if ((Test-Path $fontRegistryPath) -and
+        ((Get-Item $fontRegistryPath).GetValueNames() -contains $hackFontRegistryName)) {
+        $hackInstalled = $true
+        break
+    }
+}
+
+if (-not $hackInstalled) {
+    if (-not (Get-Module -ListAvailable -Name NerdFonts)) {
+        Install-PSResource -Name NerdFonts -Scope CurrentUser -TrustRepository
+    }
+
+    Import-Module NerdFonts
+    Install-NerdFont -Name Hack -Variant Standard
+
+    $userFontDirectory = Join-Path $env:LOCALAPPDATA "Microsoft\Windows\Fonts"
+    $hackFontFiles = @(Get-ChildItem $userFontDirectory -Filter "HackNerdFont-*.ttf" -File)
+    if ($hackFontFiles.Count -eq 0) {
+        Write-Error "Error: Hack Nerd Font files were not installed"
+        exit 1
+    }
+
+    if (-not (Test-Path $fontRegistryPaths[0])) {
+        New-Item -Path $fontRegistryPaths[0] -Force | Out-Null
+    }
+
+    foreach ($hackFontFile in $hackFontFiles) {
+        New-ItemProperty `
+            -Path $fontRegistryPaths[0] `
+            -Name "$($hackFontFile.BaseName) (TrueType)" `
+            -Value $hackFontFile.FullName `
+            -PropertyType String `
+            -Force | Out-Null
+    }
+}
+
 $links = @(
     @{ Source = ".gitconfig"; Target = "$HOME\.gitconfig" },
     @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
@@ -46,6 +90,14 @@ $links = @(
     @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
     @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }
 )
+
+$pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
+if ($pkg) {
+    $wtSettingsTarget = Join-Path $env:LOCALAPPDATA "Packages\$($pkg.PackageFamilyName)\LocalState\settings.json"
+} else {
+    $wtSettingsTarget = Join-Path $env:LOCALAPPDATA "Microsoft\Windows Terminal\settings.json"
+}
+$links += @{ Source = "windows-terminal\settings.json"; Target = $wtSettingsTarget }
 
 foreach ($link in $links) {
     $sourceFile = Join-Path $PSScriptRoot $link.Source
