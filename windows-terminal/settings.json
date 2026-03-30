@@ -1,6 +1,7 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
+    "suppressApplicationTitle": true,
     "actions": [
         {
             "command": {
@@ -43,6 +44,14 @@
         {
             "command": "openTabRenamer",
             "keys": "ctrl+shift+r"
+        },
+        {
+            "id": "Terminal.MoveTabBackward",
+            "keys": "ctrl+shift+left"
+        },
+        {
+            "id": "Terminal.MoveTabForward",
+            "keys": "ctrl+shift+right"
         }
     ],
     "newTabMenu": [
