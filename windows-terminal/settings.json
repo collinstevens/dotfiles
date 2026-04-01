@@ -47,12 +47,40 @@
             "keys": "alt+shift+r"
         },
         {
-            "id": "Terminal.MoveTabBackward",
+            "command": {
+                "action": "swapPane",
+                "direction": "right"
+            },
+            "keys": "alt+shift+right"
+        },
+        {
+            "command": {
+                "action": "swapPane",
+                "direction": "left"
+            },
             "keys": "alt+shift+left"
         },
         {
+            "command": {
+                "action": "swapPane",
+                "direction": "up"
+            },
+            "keys": "alt+shift+up"
+        },
+        {
+            "command": {
+                "action": "swapPane",
+                "direction": "down"
+            },
+            "keys": "alt+shift+down"
+        },
+        {
+            "id": "Terminal.MoveTabBackward",
+            "keys": "ctrl+shift+left"
+        },
+        {
             "id": "Terminal.MoveTabForward",
-            "keys": "alt+shift+right"
+            "keys": "ctrl+shift+right"
         }
     ],
     "newTabMenu": [
