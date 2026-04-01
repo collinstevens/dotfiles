@@ -48,11 +48,11 @@
         },
         {
             "id": "Terminal.MoveTabBackward",
-            "keys": "ctrl+shift+left"
+            "keys": "alt+shift+left"
         },
         {
             "id": "Terminal.MoveTabForward",
-            "keys": "ctrl+shift+right"
+            "keys": "alt+shift+right"
         }
     ],
     "newTabMenu": [
