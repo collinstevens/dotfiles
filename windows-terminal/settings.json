@@ -44,7 +44,7 @@
     "keybindings": [
         {
             "command": "openTabRenamer",
-            "keys": "ctrl+shift+r"
+            "keys": "alt+shift+r"
         },
         {
             "id": "Terminal.MoveTabBackward",
