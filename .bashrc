@@ -136,4 +136,6 @@ export PATH="$HOME/.opencode/bin:$PATH"
 # Amp CLI
 export PATH="$HOME/.amp/bin:$PATH"
 
+export CLAUDE_CONFIG_DIR="$HOME/.claude"
+
 PS1='\[\e[01;32m\]\w\[\e[00m\]\$ '
