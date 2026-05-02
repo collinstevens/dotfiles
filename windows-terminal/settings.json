@@ -6,6 +6,14 @@
     "actions": [
         {
             "command": {
+                "action": "sendInput",
+                "input": "\u000A"
+            },
+            "keys": "shift+enter",
+            "name": "Send newline"
+        },
+        {
+            "command": {
                 "action": "copy",
                 "singleLine": false
             },
