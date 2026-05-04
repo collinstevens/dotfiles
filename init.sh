@@ -49,4 +49,10 @@ for link in "${system_files[@]}"; do
     echo "Copied: $source_file -> $target"
 done
 
+gnome_terminal_conf="${SCRIPT_DIR}/gnome-terminal.conf"
+if [ -f "$gnome_terminal_conf" ] && command -v dconf >/dev/null 2>&1; then
+    dconf load /org/gnome/terminal/legacy/ < "$gnome_terminal_conf"
+    echo "Loaded GNOME Terminal settings: $gnome_terminal_conf"
+fi
+
 echo "Done."
