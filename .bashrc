@@ -64,6 +64,50 @@ fi
 
 eval "$(gh completion -s bash)"
 
+SSH_ENV="$HOME/.ssh/agent-environment"
+SSH_KEY="$HOME/.ssh/id_ed25519"
+
+add_ssh_key() {
+    if [ -t 0 ]; then
+        ssh-add "$SSH_KEY"
+    else
+        ssh-add "$SSH_KEY" >/dev/null 2>&1
+    fi
+}
+
+start_ssh_agent() {
+    echo "Starting ssh-agent..."
+    eval "$(ssh-agent -s)" >/dev/null
+    echo "export SSH_AUTH_SOCK=$SSH_AUTH_SOCK" > "$SSH_ENV"
+    echo "export SSH_AGENT_PID=$SSH_AGENT_PID" >> "$SSH_ENV"
+    chmod 600 "$SSH_ENV"
+
+    add_ssh_key
+}
+
+agent_can_connect() {
+    [ -n "${SSH_AUTH_SOCK:-}" ] || return 1
+    [ -S "$SSH_AUTH_SOCK" ] || return 1
+
+    ssh-add -l >/dev/null 2>&1
+
+    case $? in
+        0|1) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+if [ -f "$SSH_ENV" ]; then
+    . "$SSH_ENV" >/dev/null
+fi
+
+if agent_can_connect; then
+    ssh-add -l >/dev/null 2>&1 || add_ssh_key
+else
+    rm -f "$SSH_ENV"
+    start_ssh_agent
+fi
+
 export COLORTERM=truecolor
 
 # Amp CLI
