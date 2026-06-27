@@ -3,7 +3,8 @@ $ErrorActionPreference = "Stop"
 $links = @(
     @{ Source = ".gitconfig"; Target = "$HOME\.gitconfig" },
     @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
-    @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" }
+    @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
+    @{ Source = ".claude\settings.json"; Target = "$HOME\.claude\settings.json" }
 )
 
 $pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
@@ -28,6 +29,10 @@ foreach ($link in $links) {
         Write-Host "Removed existing: $target"
     }
 
+    $targetDir = Split-Path -Parent $target
+    if (-not (Test-Path $targetDir)) {
+        New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+    }
     Copy-Item -Path $sourceFile -Destination $target
     Write-Host "Copied: $sourceFile -> $target"
 }

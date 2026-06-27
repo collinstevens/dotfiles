@@ -7,6 +7,7 @@ links=(
     ".bashrc:$HOME/.bashrc"
     ".gitconfig:$HOME/.gitconfig"
     ".gitconfig-linux:$HOME/.gitconfig-linux"
+    ".claude/settings.json:$HOME/.claude/settings.json"
 )
 
 system_files=(
@@ -27,6 +28,7 @@ for link in "${links[@]}"; do
         echo "Removed existing: $target"
     fi
 
+    mkdir -p "$(dirname "$target")"
     cp "$source_file" "$target"
     echo "Copied: $source_file -> $target"
 done
