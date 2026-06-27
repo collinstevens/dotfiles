@@ -8,5 +8,6 @@
   },
   "model": "opus[1m]",
   "effortLevel": "high",
-  "theme": "dark-ansi"
+  "theme": "dark-ansi",
+  "tui": "default"
 }
