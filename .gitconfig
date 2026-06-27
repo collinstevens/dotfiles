@@ -39,23 +39,6 @@
 [commit]
 	gpgsign = true
 
-[lfs]
-	# GitHub doesn't implement the pure-SSH LFS protocol (git-lfs-transfer), so
-	# git-lfs wastes 5-20s probing it before falling back to HTTPS - and can hang
-	# outright under SSH multiplexing. Skip the probe and use the hybrid protocol.
-	sshtransfer = never
-	# WSL2's NAT intermittently stalls TLS handshakes to GitHub over 443. With the
-	# defaults (8 parallel transfers, 30s dial/tls timeouts) a single stalled blob
-	# upload hangs the whole push for minutes. Fewer parallel handshakes + shorter
-	# timeouts make a stall abort and retry in ~15s instead.
-	concurrenttransfers = 2
-	dialtimeout = 10
-	tlstimeout = 10
-	activitytimeout = 15
-
-[lfs "transfer"]
-	maxretries = 5
-
 [includeIf "gitdir/i:C:/"]
     path = ~/.gitconfig-windows
 
