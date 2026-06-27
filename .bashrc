@@ -108,7 +108,19 @@ else
     start_ssh_agent
 fi
 
+# Remove every PATH entry starting with /mnt/ (to avoid WSL issues)
+PATH="$(
+  printf '%s\n' "$PATH" \
+    | tr ':' '\n' \
+    | grep -v '^/mnt/' \
+    | paste -sd: -
+)"
+export PATH
+
 export COLORTERM=truecolor
 
 # Amp CLI
 export PATH="$HOME/.amp/bin:$PATH"
+
+# Allow `code .` from WSL without importing the entire Windows PATH
+export PATH="$PATH:/mnt/c/Program Files/Microsoft VS Code/bin"

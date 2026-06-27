@@ -12,6 +12,10 @@ links=(
     ".gitignore-global:$HOME/.gitignore-global"
 )
 
+system_files=(
+    "wsl.conf:/etc/wsl.conf"
+)
+
 for link in "${links[@]}"; do
     source_file="${SCRIPT_DIR}/${link%%:*}"
     target="${link##*:}"
@@ -28,6 +32,24 @@ for link in "${links[@]}"; do
 
     mkdir -p "$(dirname "$target")"
     cp "$source_file" "$target"
+    echo "Copied: $source_file -> $target"
+done
+
+for link in "${system_files[@]}"; do
+    source_file="${SCRIPT_DIR}/${link%%:*}"
+    target="${link##*:}"
+
+    if [ ! -e "$source_file" ]; then
+        echo "Error: Source file not found: $source_file" >&2
+        exit 1
+    fi
+
+    if [ -w "$(dirname "$target")" ]; then
+        install -m 0644 "$source_file" "$target"
+    else
+        sudo install -m 0644 "$source_file" "$target"
+    fi
+
     echo "Copied: $source_file -> $target"
 done
 
