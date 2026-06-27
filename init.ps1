@@ -2,7 +2,8 @@ $ErrorActionPreference = "Stop"
 
 $links = @(
     @{ Source = ".gitconfig"; Target = "$HOME\.gitconfig" },
-    @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" }
+    @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
+    @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" }
 )
 
 $pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
