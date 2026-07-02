@@ -6,8 +6,8 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
-  "effortLevel": "low",
+  "model": "fable",
+  "effortLevel": "high",
   "tui": "default",
   "theme": "dark-ansi"
 }
