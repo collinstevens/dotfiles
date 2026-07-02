@@ -5,7 +5,8 @@ $links = @(
     @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
     @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
     @{ Source = ".claude\settings.json"; Target = "$HOME\.claude\settings.json" },
-    @{ Source = ".claude\CLAUDE.md"; Target = "$HOME\.claude\CLAUDE.md" }
+    @{ Source = ".claude\CLAUDE.md"; Target = "$HOME\.claude\CLAUDE.md" },
+    @{ Source = "powershell\Microsoft.PowerShell_profile.ps1"; Target = "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" }
 )
 
 $pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
