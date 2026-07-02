@@ -9,6 +9,7 @@ links=(
     ".gitconfig-linux:$HOME/.gitconfig-linux"
     ".claude/settings.json:$HOME/.claude/settings.json"
     ".claude/CLAUDE.md:$HOME/.claude/CLAUDE.md"
+    ".claude/keybindings.json:$HOME/.claude/keybindings.json"
 )
 
 system_files=(
