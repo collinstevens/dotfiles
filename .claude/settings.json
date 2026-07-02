@@ -6,7 +6,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "fable",
   "effortLevel": "high",
   "theme": "dark-ansi",
   "tui": "default"
