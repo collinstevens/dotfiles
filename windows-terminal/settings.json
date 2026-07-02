@@ -1,19 +1,20 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "suppressApplicationTitle": true,
-    "newTabPosition": "afterCurrentTab",
-    "actions": [
+    "actions": 
+    [
         {
-            "command": {
+            "command": 
+            {
                 "action": "sendInput",
-                "input": "\u000A"
+                "input": "\n"
             },
-            "keys": "shift+enter",
+            "id": "User.sendInput.DFCDAF06",
             "name": "Send newline"
         },
         {
-            "command": {
+            "command": 
+            {
                 "action": "copy",
                 "singleLine": false
             },
@@ -24,22 +25,24 @@
             "id": "User.paste"
         },
         {
-            "command": {
+            "command": 
+            {
                 "action": "newTab"
             },
             "id": "User.newTab.5DEADB41"
         },
         {
-            "command": "find",
-            "id": "User.find"
-        },
-        {
-            "command": {
+            "command": 
+            {
                 "action": "splitPane",
                 "split": "auto",
                 "splitMode": "duplicate"
             },
             "id": "User.splitPane.A6751878"
+        },
+        {
+            "command": "find",
+            "id": "User.find"
         },
         {
             "command": "closePane",
@@ -49,60 +52,58 @@
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
-    "keybindings": [
+    "keybindings": 
+    [
         {
-            "command": "openTabRenamer",
-            "keys": "alt+shift+r"
-        },
-        {
-            "command": {
-                "action": "swapPane",
-                "direction": "right"
-            },
-            "keys": "alt+shift+right"
-        },
-        {
-            "command": {
-                "action": "swapPane",
-                "direction": "left"
-            },
-            "keys": "alt+shift+left"
-        },
-        {
-            "command": {
-                "action": "swapPane",
-                "direction": "up"
-            },
-            "keys": "alt+shift+up"
-        },
-        {
-            "command": {
-                "action": "swapPane",
-                "direction": "down"
-            },
-            "keys": "alt+shift+down"
+            "id": "Terminal.MoveTabForward",
+            "keys": "ctrl+shift+right"
         },
         {
             "id": "Terminal.MoveTabBackward",
             "keys": "ctrl+shift+left"
         },
         {
-            "id": "Terminal.MoveTabForward",
-            "keys": "ctrl+shift+right"
+            "id": "User.sendInput.DFCDAF06",
+            "keys": "shift+enter"
+        },
+        {
+            "id": "Terminal.SwapPaneUp",
+            "keys": "alt+shift+up"
+        },
+        {
+            "id": "Terminal.OpenTabRenamer",
+            "keys": "alt+shift+r"
+        },
+        {
+            "id": "Terminal.SwapPaneRight",
+            "keys": "alt+shift+right"
+        },
+        {
+            "id": "Terminal.SwapPaneLeft",
+            "keys": "alt+shift+left"
+        },
+        {
+            "id": "Terminal.SwapPaneDown",
+            "keys": "alt+shift+down"
         }
     ],
-    "newTabMenu": [
+    "newTabMenu": 
+    [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles": {
-        "defaults": {
+    "newTabPosition": "afterCurrentTab",
+    "profiles": 
+    {
+        "defaults": 
+        {
             "bellStyle": "none",
             "colorScheme": "Campbell",
             "showMarksOnScrollbar": false
         },
-        "list": [
+        "list": 
+        [
             {
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
                 "hidden": false,
@@ -128,9 +129,10 @@
                 "hidden": false,
                 "name": "Git Bash",
                 "source": "Git"
-            },
+            }
         ]
     },
+    "schemes": [],
     "tabWidthMode": "titleLength",
     "theme": "dark",
     "themes": []
