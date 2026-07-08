@@ -7,7 +7,7 @@
     "defaultMode": "auto"
   },
   "autoMemoryEnabled": false,
-  "model": "fable",
+  "model": "opus[1m]",
   "effortLevel": "high",
   "tui": "default",
   "theme": "dark-ansi"
