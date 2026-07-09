@@ -6,6 +6,7 @@ $links = @(
     @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
     @{ Source = ".claude\settings.json"; Target = "$HOME\.claude\settings.json" },
     @{ Source = ".claude\CLAUDE.md"; Target = "$HOME\.claude\CLAUDE.md" },
+    @{ Source = ".codex\AGENTS.md"; Target = "$HOME\.codex\AGENTS.md" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
     @{ Source = "powershell\Microsoft.PowerShell_profile.ps1"; Target = "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" }
 )
