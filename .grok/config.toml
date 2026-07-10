@@ -1,0 +1,31 @@
+[models]
+default = "grok-4.5"
+default_reasoning_effort = "high"
+
+[memory]
+enabled = false
+
+[features]
+telemetry = false
+feedback = false
+
+[telemetry]
+trace_upload = false
+mixpanel_enabled = false
+
+[ui]
+permission_mode = "auto"
+max_thoughts_width = 120
+fork_secondary_model = "grok-build"
+yolo = false
+compact_mode = false
+
+[cli]
+installer = "internal"
+
+[marketplace]
+official_marketplace_auto_installed = true
+
+[[marketplace.sources]]
+name = "xAI Official"
+git = "https://github.com/xai-org/plugin-marketplace.git"
