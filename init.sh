@@ -10,6 +10,8 @@ links=(
     ".claude/settings.json:$HOME/.claude/settings.json"
     ".claude/CLAUDE.md:$HOME/.claude/CLAUDE.md"
     ".codex/AGENTS.md:$HOME/.codex/AGENTS.md"
+    ".grok/config.toml:$HOME/.grok/config.toml"
+    ".codex/AGENTS.md:$HOME/.grok/AGENTS.md"
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
 )
 
