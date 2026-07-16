@@ -18,3 +18,9 @@
 - Never write code comments. If code seems to need a comment, rewrite the code to be self-explanatory instead.
 - When modifying code, delete any existing comments the change invalidates.
 - Leave existing comments alone when the code they relate to isn't being modified.
+
+# Tests
+
+- Never write or commit a new test unless the user explicitly asks for one.
+- If a code change breaks an existing test, fix that existing test.
+- Temporary tests are allowed to confirm behavior or validate an assumption, but remove them before committing so they are never left in the tree.
