@@ -9,6 +9,7 @@ $links = @(
     @{ Source = ".codex\AGENTS.md"; Target = "$HOME\.codex\AGENTS.md" },
     @{ Source = ".grok\config.toml"; Target = "$HOME\.grok\config.toml" },
     @{ Source = ".codex\AGENTS.md"; Target = "$HOME\.grok\AGENTS.md" },
+    @{ Source = ".config\opencode\opencode.jsonc"; Target = "$HOME\.config\opencode\opencode.jsonc" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
     @{ Source = "powershell\Microsoft.PowerShell_profile.ps1"; Target = "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" }
 )

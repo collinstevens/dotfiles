@@ -12,6 +12,7 @@ links=(
     ".codex/AGENTS.md:$HOME/.codex/AGENTS.md"
     ".grok/config.toml:$HOME/.grok/config.toml"
     ".codex/AGENTS.md:$HOME/.grok/AGENTS.md"
+    ".config/opencode/opencode.jsonc:$HOME/.config/opencode/opencode.jsonc"
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
 )
 
