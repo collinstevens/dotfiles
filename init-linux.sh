@@ -59,6 +59,7 @@ links=(
     ".claude/statusline-command.sh:$HOME/.claude/statusline-command.sh"
     ".codex/rules/default.rules:$HOME/.codex/rules/default.rules"
     ".grok/config.toml:$HOME/.grok/config.toml"
+    ".config/opencode/opencode.jsonc:$HOME/.config/opencode/opencode.jsonc"
     ".config/starship-linux.toml:$HOME/.config/starship.toml"
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
 )
