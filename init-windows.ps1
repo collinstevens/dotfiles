@@ -146,6 +146,7 @@ $links = @(
     @{ Source = ".claude\statusline-command.ps1"; Target = "$HOME\.claude\statusline-command.ps1" },
     @{ Source = ".codex\rules\default.rules"; Target = "$HOME\.codex\rules\default.rules" },
     @{ Source = ".grok\config.toml"; Target = "$HOME\.grok\config.toml" },
+    @{ Source = ".config\opencode\opencode.jsonc"; Target = "$HOME\.config\opencode\opencode.jsonc" },
     @{ Source = ".config\starship-windows.toml"; Target = "$HOME\.config\starship-windows.toml" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
     @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }

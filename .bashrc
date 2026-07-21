@@ -146,6 +146,9 @@ export PATH
 
 export COLORTERM=truecolor
 
+# opencode
+export PATH="$HOME/.opencode/bin:$PATH"
+
 # Amp CLI
 export PATH="$HOME/.amp/bin:$PATH"
 

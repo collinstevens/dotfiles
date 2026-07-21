@@ -28,6 +28,7 @@ links=(
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
     ".codex/rules/default.rules:$HOME/.codex/rules/default.rules"
     ".grok/config.toml:$HOME/.grok/config.toml"
+    ".config/opencode/opencode.jsonc:$HOME/.config/opencode/opencode.jsonc"
     ".config/starship-macos.toml:$HOME/.config/starship.toml"
 )
 
