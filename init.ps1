@@ -7,6 +7,7 @@ $links = @(
     @{ Source = ".claude\settings.json"; Target = "$HOME\.claude\settings.json" },
     @{ Source = ".claude\CLAUDE.md"; Target = "$HOME\.claude\CLAUDE.md" },
     @{ Source = ".codex\AGENTS.md"; Target = "$HOME\.codex\AGENTS.md" },
+    @{ Source = ".codex\rules\default.rules"; Target = "$HOME\.codex\rules\default.rules" },
     @{ Source = ".grok\config.toml"; Target = "$HOME\.grok\config.toml" },
     @{ Source = ".codex\AGENTS.md"; Target = "$HOME\.grok\AGENTS.md" },
     @{ Source = ".config\opencode\opencode.jsonc"; Target = "$HOME\.config\opencode\opencode.jsonc" },
