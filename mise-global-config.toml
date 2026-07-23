@@ -1,0 +1,17 @@
+[tools]
+git-lfs = "latest"
+node = "latest"
+npm = "latest"
+bun = "latest"
+rg = "latest"
+github-cli = "latest"
+"github:anomalyco/opencode" = "latest"
+pnpm = "latest"
+codex = "latest"
+python = "latest"
+rust = "latest"
+aube = "latest"
+yq = "latest"
+
+[tool_alias]
+npm = "npm:npm"

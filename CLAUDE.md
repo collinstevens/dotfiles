@@ -11,7 +11,7 @@ Personal cross-platform dotfiles for a developer who works on both Windows (nati
 - Windows (PowerShell): `./init.ps1`
 - Linux / WSL: `./init.sh`
 
-Both scripts **copy** (not symlink) each source file to its target in `$HOME` or a system path, removing any existing target first. After editing a dotfile here, re-run the relevant installer to propagate the change. Adding a new dotfile requires adding an entry to the `$links` array (`init.ps1`) or `links`/`system_files` arrays (`init.sh`) — the scripts do not auto-discover files.
+Both scripts **copy** (not symlink) each source file to its target in `$HOME` or a system path, removing any existing target first. They also use Mise-managed `yq` to merge `.codex/permissions.toml` into `$HOME/.codex/config.toml` without storing or replacing the full machine-specific config. After editing a dotfile here, re-run the relevant installer to propagate the change. Adding a new dotfile requires adding an entry to the `$links` array (`init.ps1`) or `links`/`system_files` arrays (`init.sh`) — the scripts do not auto-discover files.
 
 ## Architecture
 
@@ -26,8 +26,8 @@ When changing Git behavior, decide whether it is shared (`.gitconfig`) or platfo
 `.gitattributes` pins specific files: shell/config files are `eol=lf`, `*.ps1` is `eol=crlf`. Because Windows uses `autocrlf=true`, preserving these declarations matters — a PowerShell script with LF or a `.bashrc` with CRLF will break at runtime. Don't "normalize" line endings without checking `.gitattributes`.
 
 ### What each installer manages
-- `init.ps1` (Windows): `.gitconfig`, `.gitconfig-windows`, `.wslconfig`, `.claude/settings.json`, `.claude/CLAUDE.md`, `.claude/keybindings.json`, the PowerShell profile (`powershell/Microsoft.PowerShell_profile.ps1` → `$HOME\Documents\PowerShell\`), and Windows Terminal `settings.json`. It resolves the Windows Terminal settings path from the installed Appx package, falling back to the unpackaged location.
-- `init.sh` (Linux): `.bashrc`, `.gitconfig`, `.gitconfig-linux`, `.claude/settings.json`, `.claude/CLAUDE.md`, `.claude/keybindings.json` into `$HOME`; `wsl.conf` into `/etc/wsl.conf` (via `sudo install` when the target dir isn't writable); and loads `gnome-terminal.conf` into dconf when `dconf` is available.
+- `init.ps1` (Windows): `.gitconfig`, `.gitconfig-windows`, `mise-global-config.toml` as the global Mise config, `.wslconfig`, `.claude/settings.json`, `.claude/CLAUDE.md`, `.claude/keybindings.json`, the PowerShell profile (`powershell/Microsoft.PowerShell_profile.ps1` → `$HOME\Documents\PowerShell\`), and Windows Terminal `settings.json`. It resolves the Windows Terminal settings path from the installed Appx package, falling back to the unpackaged location.
+- `init.sh` (Linux): `.bashrc`, `.gitconfig`, `.gitconfig-linux`, `mise-global-config.toml` as the global Mise config, `.claude/settings.json`, `.claude/CLAUDE.md`, `.claude/keybindings.json` into `$HOME`; `wsl.conf` into `/etc/wsl.conf` (via `sudo install` when the target dir isn't writable); and loads `gnome-terminal.conf` into dconf when `dconf` is available.
 
 Note: the repo root `CLAUDE.md` (this file) is project guidance for the dotfiles repo and is **not** installed. The installed `.claude/CLAUDE.md` is the user-level global memory (cross-project git guidelines) that lands at `$HOME/.claude/CLAUDE.md`.
 
