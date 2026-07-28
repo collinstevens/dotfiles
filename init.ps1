@@ -64,7 +64,7 @@ $links = @(
     @{ Source = ".codex\AGENTS.md"; Target = "$HOME\.grok\AGENTS.md" },
     @{ Source = ".config\opencode\opencode.jsonc"; Target = "$HOME\.config\opencode\opencode.jsonc" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
-    @{ Source = "powershell\Microsoft.PowerShell_profile.ps1"; Target = "$HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" }
+    @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }
 )
 
 $pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
