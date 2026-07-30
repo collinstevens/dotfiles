@@ -1,5 +1,7 @@
 $ErrorActionPreference = "Stop"
 
+Install-Module -Name posh-git -Scope CurrentUser -Force
+
 function Set-CodexPermissions {
     param(
         [string]$ConfigPath = (Join-Path $HOME ".codex\config.toml"),
