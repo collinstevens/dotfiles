@@ -1,56 +1,7 @@
 $ErrorActionPreference = "Stop"
 
-Install-Module -Name posh-git -Scope CurrentUser -Force
-
-function Set-CodexPermissions {
-    param(
-        [string]$ConfigPath = (Join-Path $HOME ".codex\config.toml"),
-        [string]$GitIgnorePath = (Join-Path $HOME ".config\git\ignore")
-    )
-
-    $fragmentPath = Join-Path $PSScriptRoot ".codex\permissions.toml"
-    $configDirectory = Split-Path -Parent $configPath
-    $mergeExpression = '((select(fileIndex == 0) // {}) | del(.sandbox_workspace_write, .permissions.workspace_gitignore)) * (select(fileIndex == 1) | .permissions.workspace_gitignore.filesystem = {(strenv(GIT_IGNORE_PATH)): "read"})'
-
-    if (-not (Get-Command mise -ErrorAction SilentlyContinue)) {
-        throw "mise is required to update $configPath"
-    }
-    if (-not (Test-Path $fragmentPath)) {
-        throw "Codex permissions fragment not found: $fragmentPath"
-    }
-    & mise install yq@latest
-    if ($LASTEXITCODE -ne 0) {
-        throw "Unable to install yq@latest with mise"
-    }
-    $yqPath = & mise which yq --tool yq@latest
-    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $yqPath)) {
-        throw "Unable to resolve yq@latest with mise"
-    }
-
-    New-Item -ItemType Directory -Path $configDirectory -Force | Out-Null
-    if (-not (Test-Path $configPath)) {
-        [System.IO.File]::WriteAllText($configPath, "", [System.Text.UTF8Encoding]::new($false))
-    }
-
-    $temporaryPath = Join-Path $configDirectory ".config.toml.$PID.tmp"
-    $previousGitIgnorePath = $env:GIT_IGNORE_PATH
-    try {
-        $env:GIT_IGNORE_PATH = $gitIgnorePath
-        $mergedLines = @(& $yqPath eval-all --input-format toml --output-format toml $mergeExpression $configPath $fragmentPath)
-        if ($LASTEXITCODE -ne 0 -or $mergedLines.Count -eq 0) {
-            throw "Unable to merge Codex settings with yq"
-        }
-        $encoding = [System.Text.UTF8Encoding]::new($false)
-        [System.IO.File]::WriteAllText($temporaryPath, ($mergedLines -join [Environment]::NewLine) + [Environment]::NewLine, $encoding)
-        Move-Item -LiteralPath $temporaryPath -Destination $configPath -Force
-    } finally {
-        $env:GIT_IGNORE_PATH = $previousGitIgnorePath
-        if (Test-Path $temporaryPath) {
-            Remove-Item -LiteralPath $temporaryPath -Force
-        }
-    }
-
-    Write-Host "Updated Codex permissions: $configPath"
+if (-not (Get-Module -ListAvailable -Name posh-git)) {
+    Install-Module -Name posh-git -Scope CurrentUser -Force
 }
 
 $links = @(
@@ -99,6 +50,6 @@ foreach ($link in $links) {
     Write-Host "Copied: $sourceFile -> $target"
 }
 
-Set-CodexPermissions
+& (Join-Path $PSScriptRoot ".codex\configure.ps1")
 
 Write-Host "Done."

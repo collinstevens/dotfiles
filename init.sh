@@ -3,48 +3,6 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-upsert_codex_permissions() {
-    local codex_config="$HOME/.codex/config.toml"
-    local codex_config_dir
-    local codex_config_tmp
-    local codex_permissions="$SCRIPT_DIR/.codex/permissions.toml"
-    local git_ignore_path="$HOME/.config/git/ignore"
-    local merge_expression
-    local yq_path
-
-    codex_config_dir="$(dirname "$codex_config")"
-    merge_expression='((select(fileIndex == 0) // {}) | del(.sandbox_workspace_write, .permissions.workspace_gitignore)) * (select(fileIndex == 1) | .permissions.workspace_gitignore.filesystem = {(strenv(GIT_IGNORE_PATH)): "read"})'
-
-    if ! command -v mise >/dev/null 2>&1; then
-        echo "mise is required to update $codex_config" >&2
-        return 1
-    fi
-    if [ ! -f "$codex_permissions" ]; then
-        echo "Codex permissions fragment not found: $codex_permissions" >&2
-        return 1
-    fi
-    mise install yq@latest
-    yq_path="$(mise which yq --tool yq@latest)"
-
-    mkdir -p "$codex_config_dir"
-    if [ ! -f "$codex_config" ]; then
-        : > "$codex_config"
-    fi
-    codex_config_tmp="$(mktemp "${codex_config}.tmp.XXXXXX")"
-    if ! GIT_IGNORE_PATH="$git_ignore_path" "$yq_path" eval-all --input-format toml --output-format toml "$merge_expression" "$codex_config" "$codex_permissions" > "$codex_config_tmp"; then
-        rm -f -- "$codex_config_tmp"
-        return 1
-    fi
-    if [ ! -s "$codex_config_tmp" ]; then
-        echo "Unable to merge Codex settings with yq" >&2
-        rm -f -- "$codex_config_tmp"
-        return 1
-    fi
-
-    mv -f -- "$codex_config_tmp" "$codex_config"
-    echo "Updated Codex permissions: $codex_config"
-}
-
 links=(
     ".bashrc:$HOME/.bashrc"
     ".gitconfig:$HOME/.gitconfig"
@@ -101,7 +59,7 @@ for link in "${system_files[@]}"; do
     echo "Copied: $source_file -> $target"
 done
 
-upsert_codex_permissions
+bash "$SCRIPT_DIR/.codex/configure.sh"
 
 gnome_terminal_conf="${SCRIPT_DIR}/gnome-terminal.conf"
 if [ -f "$gnome_terminal_conf" ] && command -v dconf >/dev/null 2>&1; then
