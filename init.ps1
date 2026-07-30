@@ -7,7 +7,6 @@ if (-not (Get-Module -ListAvailable -Name posh-git)) {
 $links = @(
     @{ Source = ".gitconfig"; Target = "$HOME\.gitconfig" },
     @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
-    @{ Source = "mise-global-config.toml"; Target = "$HOME\.config\mise\config.toml" },
     @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
     @{ Source = ".claude\settings.json"; Target = "$HOME\.claude\settings.json" },
     @{ Source = ".claude\CLAUDE.md"; Target = "$HOME\.claude\CLAUDE.md" },

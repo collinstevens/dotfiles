@@ -7,7 +7,6 @@ links=(
     ".bashrc:$HOME/.bashrc"
     ".gitconfig:$HOME/.gitconfig"
     ".gitconfig-linux:$HOME/.gitconfig-linux"
-    "mise-global-config.toml:$HOME/.config/mise/config.toml"
     ".claude/settings.json:$HOME/.claude/settings.json"
     ".claude/CLAUDE.md:$HOME/.claude/CLAUDE.md"
     ".codex/AGENTS.md:$HOME/.codex/AGENTS.md"
