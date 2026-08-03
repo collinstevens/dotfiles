@@ -1,6 +1,6 @@
 # Git Guidelines
 
-- Don't push to main unless asked, branches are chill though.
+- Don't push to main/master unless asked, branches are chill though.
 - Use conventional commits, e.g `<type>(<optional scope>): <description>`.
   - In commit message bodies, focus on "why", more than "what" - the diff already shows the _true_ "what".
   - Make sure if there's multiple disjoint things going into a commit, each are differentiated in the body.
@@ -12,6 +12,12 @@
   - No need for a test plan section.
   - Include "fixes ..." for fixing github issues or linear tickets, to autolink.
 - Unless the user says otherwise, when asked to push, usually assume that means a branch if you're currently on main, and create a PR if there's not already one for the branch.
+
+# GitHub CLI Authentication
+
+- On Windows, run `gh` commands outside the sandbox from the first attempt because the sandbox cannot access credentials stored in the Windows keyring.
+- Treat a sandboxed `gh auth status` failure as inconclusive. Before reporting expired authentication or asking the user to log in, rerun it with escalated sandbox permissions.
+- Only ask the user to run `gh auth login` when `gh auth status` also fails outside the sandbox.
 
 # Code Comments
 

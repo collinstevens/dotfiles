@@ -5,6 +5,10 @@
 
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore-global
+	autocrlf = false
+	eol = lf
+	safecrlf = warn
 
 [init]
 	defaultBranch = master
@@ -43,5 +47,5 @@
 [includeIf "gitdir/i:C:/"]
     path = ~/.gitconfig-windows
 
-[includeIf "gitdir:/home/"]
-    path = ~/.gitconfig-linux
+[includeIf "gitdir:/Users/"]
+    path = ~/.gitconfig-macos

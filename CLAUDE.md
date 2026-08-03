@@ -4,30 +4,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Personal cross-platform dotfiles for a developer who works on both Windows (native + Windows Terminal) and Linux (WSL2 + GNOME). There is no build, test, or lint step — the "product" is the set of config files plus two installer scripts that copy them into place.
+Personal cross-platform dotfiles for Windows (native + Windows Terminal), Linux (WSL2 + GNOME), and macOS (iTerm2 + zsh). There is no build, test, or lint step — the "product" is the set of config files plus platform installers that copy them into place.
 
 ## Installing
 
-- Windows (PowerShell): `./init.ps1`
-- Linux / WSL: `./init.sh`
+- Windows (PowerShell): `./init-windows.ps1`
+- Linux / WSL: `./init-linux.sh`
+- macOS: `./init-macos.sh`
 
-Both scripts **copy** (not symlink) each source file to its target in `$HOME` or a system path, removing any existing target first. They also use Mise-managed `yq` to merge `.codex/permissions.toml` into `$HOME/.codex/config.toml` without storing or replacing the full machine-specific config. After editing a dotfile here, re-run the relevant installer to propagate the change. Adding a new dotfile requires adding an entry to the `$links` array (`init.ps1`) or `links`/`system_files` arrays (`init.sh`) — the scripts do not auto-discover files.
+The scripts **copy** (not symlink) each source file to its target in `$HOME` or a system path, removing any existing target first. They also use Mise-managed `yq` to merge `.codex/permissions.toml` into `$HOME/.codex/config.toml` without storing or replacing the full machine-specific config. After editing a dotfile here, re-run the relevant installer to propagate the change. Adding a new dotfile requires adding it to the applicable installer's `links` collection because the scripts do not auto-discover files.
 
 ## Architecture
 
 ### Platform split via per-OS includes
 `.gitconfig` is the shared base and is installed on every platform. It conditionally pulls in a platform-specific file using `includeIf`:
-- `gitdir/i:C:/` → `.gitconfig-windows` (sets `autocrlf=true`, points SSH/signing at the Windows OpenSSH binaries)
-- `gitdir:/home/` → `.gitconfig-linux` (`autocrlf=false`)
+- `gitdir/i:C:/` → `.gitconfig-windows` (points SSH/signing at the Windows OpenSSH binaries and configures GitHub credentials)
+- `gitdir:/Users/` → `.gitconfig-macos` (uses `gh` for GitHub credentials)
 
-When changing Git behavior, decide whether it is shared (`.gitconfig`) or platform-specific (the `-windows`/`-linux` variant). `init.ps1` installs `.gitconfig` + `.gitconfig-windows`; `init.sh` installs `.gitconfig` + `.gitconfig-linux`.
+The shared config disables automatic CRLF conversion, uses LF for normalized text, and warns about irreversible conversions. When changing Git behavior, decide whether it is shared (`.gitconfig`) or platform-specific. Windows and macOS installers copy their platform variants; Linux only needs the shared file.
 
 ### Line endings are load-bearing
-`.gitattributes` pins specific files: shell/config files are `eol=lf`, `*.ps1` is `eol=crlf`. Because Windows uses `autocrlf=true`, preserving these declarations matters — a PowerShell script with LF or a `.bashrc` with CRLF will break at runtime. Don't "normalize" line endings without checking `.gitattributes`.
+`.gitattributes` stores text files with LF on every platform, with CRLF reserved for `*.bat` and `*.cmd`. The shared Git config also disables automatic CRLF conversion, preventing shell and shared config files from acquiring platform-dependent endings.
 
 ### What each installer manages
-- `init.ps1` (Windows): `.gitconfig`, `.gitconfig-windows`, `.wslconfig`, `.claude/settings.json`, `.claude/CLAUDE.md`, `.claude/keybindings.json`, the PowerShell profile (`powershell/profile.ps1` → `$PROFILE.AllUsersAllHosts`), and Windows Terminal `settings.json`. It resolves the Windows Terminal settings path from the installed Appx package, falling back to the unpackaged location.
-- `init.sh` (Linux): `.bashrc`, `.gitconfig`, `.gitconfig-linux`, `.claude/settings.json`, `.claude/CLAUDE.md`, `.claude/keybindings.json` into `$HOME`; `wsl.conf` into `/etc/wsl.conf` (via `sudo install` when the target dir isn't writable); and loads `gnome-terminal.conf` into dconf when `dconf` is available.
+- `init-windows.ps1`: shared and Windows Git config, global ignores, WSL config, Windows Claude settings/status line, shared agent/config files, the all-users PowerShell profile, Windows Terminal settings, and `/etc/wsl.conf` inside WSL.
+- `init-linux.sh`: bash, shared Git config, global ignores, Unix Claude settings/status line, shared agent/config files, `/etc/wsl.conf`, and GNOME Terminal settings.
+- `init-macos.sh`: zsh, shared and macOS Git config, global ignores, Unix Claude settings/status line, shared agent/config files, LinearMouse, the keyboard LaunchAgent, and iTerm2 preferences.
 
 Note: the repo root `CLAUDE.md` (this file) is project guidance for the dotfiles repo and is **not** installed. The installed `.claude/CLAUDE.md` is the user-level global memory (cross-project git guidelines) that lands at `$HOME/.claude/CLAUDE.md`.
 

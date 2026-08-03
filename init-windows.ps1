@@ -1,5 +1,44 @@
 $ErrorActionPreference = "Stop"
 
+function Copy-WslSystemFile {
+    param(
+        [string]$Source,
+        [string]$Target
+    )
+
+    $sourceFile = Join-Path $PSScriptRoot $Source
+
+    if (-not (Test-Path $sourceFile)) {
+        Write-Error "Error: Source file not found: $sourceFile"
+        exit 1
+    }
+
+    if (-not (Get-Command wsl.exe -ErrorAction SilentlyContinue)) {
+        Write-Host "Skipped: wsl.exe not found, cannot write $Target"
+        return
+    }
+
+    $distributions = @(& wsl.exe --list --quiet) -replace "`0", "" | Where-Object { $_.Trim() }
+    if ($LASTEXITCODE -ne 0 -or $distributions.Count -eq 0) {
+        Write-Host "Skipped: no WSL distribution registered, cannot write $Target"
+        return
+    }
+
+    $wslSource = & wsl.exe -u root wslpath -a ($sourceFile -replace '\\', '/')
+    if ($LASTEXITCODE -ne 0 -or -not $wslSource) {
+        Write-Error "Error: unable to translate $sourceFile to a WSL path"
+        exit 1
+    }
+
+    & wsl.exe -u root sh -c "tr -d '\r' < '$wslSource' > '$Target'"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Error: unable to write $Target inside WSL"
+        exit 1
+    }
+
+    Write-Host "Copied: $sourceFile -> wsl:$Target"
+}
+
 if (-not (Get-Module -ListAvailable -Name posh-git)) {
     Install-Module -Name posh-git -Scope CurrentUser -Force
 }
@@ -7,8 +46,10 @@ if (-not (Get-Module -ListAvailable -Name posh-git)) {
 $links = @(
     @{ Source = ".gitconfig"; Target = "$HOME\.gitconfig" },
     @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
+    @{ Source = ".gitignore-global"; Target = "$HOME\.gitignore-global" },
     @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
-    @{ Source = ".claude\settings.json"; Target = "$HOME\.claude\settings.json" },
+    @{ Source = ".claude\settings-windows.json"; Target = "$HOME\.claude\settings.json" },
+    @{ Source = ".claude\statusline-command.ps1"; Target = "$HOME\.claude\statusline-command.ps1" },
     @{ Source = ".claude\CLAUDE.md"; Target = "$HOME\.claude\CLAUDE.md" },
     @{ Source = ".codex\AGENTS.md"; Target = "$HOME\.codex\AGENTS.md" },
     @{ Source = ".codex\rules\default.rules"; Target = "$HOME\.codex\rules\default.rules" },
@@ -50,5 +91,7 @@ foreach ($link in $links) {
 }
 
 & (Join-Path $PSScriptRoot ".codex\configure.ps1")
+
+Copy-WslSystemFile -Source "wsl.conf" -Target "/etc/wsl.conf"
 
 Write-Host "Done."

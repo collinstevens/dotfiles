@@ -1,9 +1,6 @@
-* text=auto
+* text=auto eol=lf
 
-*.sh text eol=lf
-.bashrc text eol=lf
-.gitconfig text eol=lf
-.gitconfig-linux text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
 
-*.ps1 text eol=crlf
-.gitconfig-windows text eol=lf
+iterm2/com.googlecode.iterm2.plist -text

@@ -1,7 +1,17 @@
 [core]
-	autocrlf = true
 	longpaths = true
 	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
 
 [gpg "ssh"]
 	program = C:/Windows/System32/OpenSSH/ssh-keygen.exe
+
+[credential]
+	credentialStore = dpapi
+
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential

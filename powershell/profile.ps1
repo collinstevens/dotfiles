@@ -1,10 +1,23 @@
-# Silence PSReadLine's beep (e.g. backspace at the start of the prompt).
-# This plays via Console.Beep, so Windows Terminal's bellStyle can't suppress it.
-Set-PSReadLineOption -BellStyle None
+$miseExe = (Get-Command mise -CommandType Application -ErrorAction SilentlyContinue).Source
+if ($miseExe) {
+    $miseCache = Join-Path $env:LOCALAPPDATA "mise-activate.cached.ps1"
+    if (-not (Test-Path $miseCache) -or
+        (Get-Item $miseCache).LastWriteTime -lt (Get-Item $miseExe).LastWriteTime) {
+        & $miseExe activate pwsh | Where-Object { $_ -ne '_mise_hook' } | Set-Content $miseCache
+    }
+    . $miseCache
+}
 
-Import-Module posh-git
+$null = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -MaxTriggerCount 1 -Action {
+    Set-PSReadLineOption -BellStyle None
 
-(&mise activate pwsh) | Out-String | Invoke-Expression
+    if (Test-Path Function:\_mise_hook) {
+        _mise_hook
+    }
+
+    Import-Module posh-git -Global
+    function global:prompt { & $global:GitPromptScriptBlock }
+}
 
 function mktemp {
     param([string]$Prefix)

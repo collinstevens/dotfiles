@@ -1,6 +1,6 @@
 # Git Guidelines
 
-- Don't push to main unless asked, branches are chill though.
+- Don't push to main/master unless asked, branches are chill though.
 - Use conventional commits, e.g `<type>(<optional scope>): <description>`.
   - In commit message bodies, focus on "why", more than "what" - the diff already shows the _true_ "what".
   - Make sure if there's multiple disjoint things going into a commit, each are differentiated in the body.

@@ -1,0 +1,21 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "autoMemoryEnabled": false,
+  "model": "fable",
+  "effortLevel": "high",
+  "autoUpdatesChannel": "latest",
+  "tui": "default",
+  "theme": "dark-ansi",
+  "switchModelsOnFlag": false,
+  "skipDangerousModePermissionPrompt": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  }
+}
