@@ -1,0 +1,7 @@
+brew "gh"
+brew "git"
+brew "jq"
+cask "iterm2"
+cask "linearmouse"
+cask "rectangle"
+cask "visual-studio-code"
