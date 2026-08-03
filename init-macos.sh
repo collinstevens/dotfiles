@@ -4,6 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 links=(
+    ".zshrc:$HOME/.zshrc"
     ".zprofile:$HOME/.zprofile"
     ".gitconfig:$HOME/.gitconfig"
     ".gitconfig-macos:$HOME/.gitconfig-macos"

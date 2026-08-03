@@ -3,7 +3,8 @@ $ErrorActionPreference = "Stop"
 $links = @(
     @{ Source = ".gitconfig"; Target = "$HOME\.gitconfig" },
     @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
-    @{ Source = ".gitignore-global"; Target = "$HOME\.gitignore-global" }
+    @{ Source = ".gitignore-global"; Target = "$HOME\.gitignore-global" },
+    @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }
 )
 
 foreach ($link in $links) {
