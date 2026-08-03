@@ -55,6 +55,10 @@
     "keybindings": 
     [
         {
+            "id": "Terminal.ClearBuffer",
+            "keys": "ctrl+k"
+        },
+        {
             "id": "Terminal.MoveTabForward",
             "keys": "ctrl+shift+right"
         },
