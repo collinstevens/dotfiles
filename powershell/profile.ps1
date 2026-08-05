@@ -28,3 +28,26 @@ function cdtemp {
     param([string]$Prefix)
     Set-Location -Path (mktemp $Prefix)
 }
+
+function reloadenv {
+    $machineEnvironment = [Environment]::GetEnvironmentVariables("Machine")
+    $userEnvironment = [Environment]::GetEnvironmentVariables("User")
+
+    foreach ($variable in $machineEnvironment.GetEnumerator()) {
+        [Environment]::SetEnvironmentVariable($variable.Key, $variable.Value, "Process")
+    }
+
+    foreach ($variable in $userEnvironment.GetEnumerator()) {
+        if ($variable.Key -ne "Path") {
+            [Environment]::SetEnvironmentVariable($variable.Key, $variable.Value, "Process")
+        }
+    }
+
+    $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+    $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+    $env:Path = (@($machinePath, $userPath) | Where-Object { $_ }) -join ";"
+
+    if (Test-Path Function:\_mise_hook) {
+        _mise_hook
+    }
+}
