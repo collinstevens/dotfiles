@@ -40,7 +40,7 @@ function Copy-WslSystemFile {
 }
 
 if (-not (Get-Module -ListAvailable -Name posh-git)) {
-    Install-Module -Name posh-git -Scope CurrentUser -Force
+    Install-PSResource -Name posh-git -Scope CurrentUser -TrustRepository
 }
 
 $links = @(
