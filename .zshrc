@@ -8,4 +8,4 @@ bindkey "^[[3~" delete-char
 
 command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
 
-PROMPT='%1~ %# '
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"

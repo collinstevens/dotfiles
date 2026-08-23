@@ -3,6 +3,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+if ! command -v starship >/dev/null 2>&1; then
+    brew install starship
+fi
+
 links=(
     ".zshrc:$HOME/.zshrc"
     ".zprofile:$HOME/.zprofile"
@@ -19,6 +23,7 @@ links=(
     ".grok/config.toml:$HOME/.grok/config.toml"
     ".codex/AGENTS.md:$HOME/.grok/AGENTS.md"
     ".config/opencode/opencode.jsonc:$HOME/.config/opencode/opencode.jsonc"
+    ".config/starship.toml:$HOME/.config/starship.toml"
 )
 
 for link in "${links[@]}"; do

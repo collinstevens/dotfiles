@@ -3,6 +3,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+if ! command -v starship >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/starship" ]; then
+    curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"
+fi
+
 links=(
     ".bashrc:$HOME/.bashrc"
     ".gitconfig:$HOME/.gitconfig"
@@ -15,6 +19,7 @@ links=(
     ".grok/config.toml:$HOME/.grok/config.toml"
     ".codex/AGENTS.md:$HOME/.grok/AGENTS.md"
     ".config/opencode/opencode.jsonc:$HOME/.config/opencode/opencode.jsonc"
+    ".config/starship.toml:$HOME/.config/starship.toml"
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
 )
 
