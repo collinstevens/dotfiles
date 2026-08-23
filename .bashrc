@@ -4,8 +4,8 @@ case $- in
       *) return;;
 esac
 
-if [[ "$PWD" == "$HOME" && -d "$HOME/src" ]]; then
-    cd "$HOME/src"
+if [[ "$PWD" == "$HOME" && -d "$HOME/projects" ]]; then
+    cd "$HOME/projects"
 fi
 
 # don't put duplicate lines or lines starting with space in the history.

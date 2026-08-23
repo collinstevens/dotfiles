@@ -57,7 +57,7 @@
                 "hidden": false,
                 "name": "PowerShell",
                 "source": "Windows.Terminal.PowershellCore",
-                "startingDirectory": "%USERPROFILE%\\src",
+                "startingDirectory": "%USERPROFILE%",
                 "tabTitle": "PowerShell"
             },
             {
