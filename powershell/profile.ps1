@@ -16,6 +16,7 @@ $null = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -MaxTriggerCoun
     }
 
     Import-Module posh-git -Global
+    $global:GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
     function global:prompt { & $global:GitPromptScriptBlock }
 }
 
