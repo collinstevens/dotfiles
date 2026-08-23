@@ -6,15 +6,6 @@
         {
             "command": 
             {
-                "action": "sendInput",
-                "input": "\n"
-            },
-            "id": "User.sendInput.DFCDAF06",
-            "name": "Send newline"
-        },
-        {
-            "command": 
-            {
                 "action": "copy",
                 "singleLine": false
             },
@@ -55,20 +46,12 @@
     "keybindings": 
     [
         {
-            "id": "Terminal.ClearBuffer",
-            "keys": "ctrl+k"
-        },
-        {
             "id": "Terminal.MoveTabForward",
             "keys": "ctrl+shift+right"
         },
         {
             "id": "Terminal.MoveTabBackward",
             "keys": "ctrl+shift+left"
-        },
-        {
-            "id": "User.sendInput.DFCDAF06",
-            "keys": "shift+enter"
         },
         {
             "id": "Terminal.SwapPaneUp",
