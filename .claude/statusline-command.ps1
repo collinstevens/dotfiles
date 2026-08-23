@@ -39,9 +39,9 @@ foreach ($candidate in @('permissionMode', 'permission_mode')) {
 }
 if ($permissionMode) { $segments += "$mauve$permissionMode$reset" }
 
-$contextUsed = Get-Prop (Get-Prop $data 'context_window') 'used_percentage'
-if ($null -eq $contextUsed) { $contextUsed = 0 }
-$segments += ($peach + ("Context {0:N0}% used" -f [double]$contextUsed) + $reset)
+$tokensUsed = Get-Prop (Get-Prop $data 'context_window') 'total_input_tokens'
+if ($null -eq $tokensUsed) { $tokensUsed = 0 }
+$segments += ($peach + ("Context {0:N0} tokens used" -f [double]$tokensUsed) + $reset)
 
 $rateLimits = Get-Prop $data 'rate_limits'
 $fiveHourUsed = Get-Prop (Get-Prop $rateLimits 'five_hour') 'used_percentage'
