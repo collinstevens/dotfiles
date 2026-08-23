@@ -16,7 +16,6 @@ format = "[$path]($style) "
 style = "bold blue"
 truncation_length = 3
 truncate_to_repo = true
-substitutions = [{ from = '(?i)^C:/Users/[^/]+$', to = '~', regex = true }]
 
 [git_branch]
 format = "[$branch]($style) "

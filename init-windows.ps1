@@ -113,7 +113,7 @@ $links = @(
     @{ Source = ".grok\config.toml"; Target = "$HOME\.grok\config.toml" },
     @{ Source = ".codex\AGENTS.md"; Target = "$HOME\.grok\AGENTS.md" },
     @{ Source = ".config\opencode\opencode.jsonc"; Target = "$HOME\.config\opencode\opencode.jsonc" },
-    @{ Source = ".config\starship.toml"; Target = "$HOME\.config\starship.toml" },
+    @{ Source = ".config\starship-windows.toml"; Target = "$HOME\.config\starship.toml" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
     @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }
 )

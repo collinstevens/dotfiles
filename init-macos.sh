@@ -23,7 +23,7 @@ links=(
     ".grok/config.toml:$HOME/.grok/config.toml"
     ".codex/AGENTS.md:$HOME/.grok/AGENTS.md"
     ".config/opencode/opencode.jsonc:$HOME/.config/opencode/opencode.jsonc"
-    ".config/starship.toml:$HOME/.config/starship.toml"
+    ".config/starship-macos.toml:$HOME/.config/starship.toml"
 )
 
 for link in "${links[@]}"; do
