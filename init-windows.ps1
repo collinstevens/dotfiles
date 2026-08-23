@@ -1,5 +1,9 @@
 $ErrorActionPreference = "Stop"
 
+$machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+$env:Path = (@($machinePath, $userPath) | Where-Object { $_ }) -join ";"
+
 function Copy-WslSystemFile {
     param(
         [string]$Source,
@@ -39,8 +43,61 @@ function Copy-WslSystemFile {
     Write-Host "Copied: $sourceFile -> wsl:$Target"
 }
 
-if (-not (Get-Module -ListAvailable -Name posh-git)) {
-    Install-PSResource -Name posh-git -Scope CurrentUser -TrustRepository
+if (-not (Get-Command starship -CommandType Application -ErrorAction SilentlyContinue)) {
+    if (-not (Get-Command winget.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+        Write-Error "Error: winget.exe is required to install Starship"
+        exit 1
+    }
+
+    & winget.exe install --id Starship.Starship --exact --source winget --accept-package-agreements --accept-source-agreements
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Error: unable to install Starship"
+        exit 1
+    }
+}
+
+$hackInstalled = $false
+$hackFontRegistryName = "HackNerdFont-Regular (TrueType)"
+$fontRegistryPaths = @(
+    "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts",
+    "HKLM:\Software\Microsoft\Windows NT\CurrentVersion\Fonts"
+)
+
+foreach ($fontRegistryPath in $fontRegistryPaths) {
+    if ((Test-Path $fontRegistryPath) -and
+        ((Get-Item $fontRegistryPath).GetValueNames() -contains $hackFontRegistryName)) {
+        $hackInstalled = $true
+        break
+    }
+}
+
+if (-not $hackInstalled) {
+    if (-not (Get-Module -ListAvailable -Name NerdFonts)) {
+        Install-PSResource -Name NerdFonts -Scope CurrentUser -TrustRepository
+    }
+
+    Import-Module NerdFonts
+    Install-NerdFont -Name Hack -Variant Standard
+
+    $userFontDirectory = Join-Path $env:LOCALAPPDATA "Microsoft\Windows\Fonts"
+    $hackFontFiles = @(Get-ChildItem $userFontDirectory -Filter "HackNerdFont-*.ttf" -File)
+    if ($hackFontFiles.Count -eq 0) {
+        Write-Error "Error: Hack Nerd Font files were not installed"
+        exit 1
+    }
+
+    if (-not (Test-Path $fontRegistryPaths[0])) {
+        New-Item -Path $fontRegistryPaths[0] -Force | Out-Null
+    }
+
+    foreach ($hackFontFile in $hackFontFiles) {
+        New-ItemProperty `
+            -Path $fontRegistryPaths[0] `
+            -Name "$($hackFontFile.BaseName) (TrueType)" `
+            -Value $hackFontFile.FullName `
+            -PropertyType String `
+            -Force | Out-Null
+    }
 }
 
 $links = @(
@@ -56,6 +113,7 @@ $links = @(
     @{ Source = ".grok\config.toml"; Target = "$HOME\.grok\config.toml" },
     @{ Source = ".codex\AGENTS.md"; Target = "$HOME\.grok\AGENTS.md" },
     @{ Source = ".config\opencode\opencode.jsonc"; Target = "$HOME\.config\opencode\opencode.jsonc" },
+    @{ Source = ".config\starship.toml"; Target = "$HOME\.config\starship.toml" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
     @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }
 )

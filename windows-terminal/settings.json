@@ -48,6 +48,10 @@
         {
             "bellStyle": "none",
             "colorScheme": "Campbell",
+            "font":
+            {
+                "face": "Hack Nerd Font"
+            },
             "showMarksOnScrollbar": false
         },
         "list": 

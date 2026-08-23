@@ -8,9 +8,11 @@ if ($miseExe) {
     . $miseCache
 }
 
-Import-Module posh-git -Global
-$global:GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
-function global:prompt { & $global:GitPromptScriptBlock }
+$starshipExe = (Get-Command starship -CommandType Application -ErrorAction SilentlyContinue).Source
+if (-not $starshipExe) {
+    $starshipExe = Join-Path $env:ProgramFiles "starship\bin\starship.exe"
+}
+Invoke-Expression (& $starshipExe init powershell)
 
 $null = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -MaxTriggerCount 1 -Action {
     Set-PSReadLineOption -BellStyle None
