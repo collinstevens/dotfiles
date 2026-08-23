@@ -142,6 +142,7 @@ $links = @(
     @{ Source = ".gitignore-global"; Target = "$HOME\.gitignore-global" },
     @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
     @{ Source = ".claude\settings-windows.json"; Target = "$HOME\.claude\settings.json" },
+    @{ Source = ".claude\statusline-command.ps1"; Target = "$HOME\.claude\statusline-command.ps1" },
     @{ Source = ".config\starship-windows.toml"; Target = "$HOME\.config\starship-windows.toml" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
     @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }

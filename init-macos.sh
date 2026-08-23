@@ -20,6 +20,7 @@ links=(
     ".gitignore-global:$HOME/.gitignore-global"
     "linearmouse/linearmouse.json:$HOME/.config/linearmouse/linearmouse.json"
     ".claude/settings-unix.json:$HOME/.claude/settings.json"
+    ".claude/statusline-command.sh:$HOME/.claude/statusline-command.sh"
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
     ".config/starship-macos.toml:$HOME/.config/starship.toml"
 )
