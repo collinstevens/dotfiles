@@ -34,6 +34,7 @@ links=(
     ".gitconfig:$HOME/.gitconfig"
     ".gitignore-global:$HOME/.gitignore-global"
     ".claude/settings-unix.json:$HOME/.claude/settings.json"
+    ".claude/statusline-command.sh:$HOME/.claude/statusline-command.sh"
     ".config/starship-linux.toml:$HOME/.config/starship.toml"
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
 )
