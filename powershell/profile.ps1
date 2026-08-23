@@ -8,16 +8,16 @@ if ($miseExe) {
     . $miseCache
 }
 
+Import-Module posh-git -Global
+$global:GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
+function global:prompt { & $global:GitPromptScriptBlock }
+
 $null = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -MaxTriggerCount 1 -Action {
     Set-PSReadLineOption -BellStyle None
 
     if (Test-Path Function:\_mise_hook) {
         _mise_hook
     }
-
-    Import-Module posh-git -Global
-    $global:GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
-    function global:prompt { & $global:GitPromptScriptBlock }
 }
 
 function mktemp {
