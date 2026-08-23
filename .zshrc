@@ -5,3 +5,5 @@ if [[ "$PWD" == "$HOME" && -d "$HOME/projects" ]]; then
 fi
 
 bindkey "^[[3~" delete-char
+
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
