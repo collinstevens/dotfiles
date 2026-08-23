@@ -37,6 +37,9 @@ The shared config disables automatic CRLF conversion, uses LF for normalized tex
 
 Note: the repo root `CLAUDE.md` (this file) is project guidance for the dotfiles repo and is **not** installed. The installed `.claude/CLAUDE.md` is the user-level global memory (cross-project git guidelines) that lands at `$HOME/.claude/CLAUDE.md`.
 
+### SSH public key naming
+Name public keys in `ssh-keys/` using `user-hostname-keytype.pub`.
+
 ### WSL2 networking
 `.wslconfig` (Windows-side, lives in `$HOME`) sets `networkingMode=mirrored`. `wsl.conf` (Linux-side, `/etc/wsl.conf`) enables systemd and sets `appendWindowsPath=false` so the Windows PATH isn't inherited. `.bashrc` additionally strips any leftover `/mnt/`-prefixed PATH entries and re-adds only the VS Code bin path, so that `code .` works from WSL without importing the whole Windows PATH. These three pieces work together — changing one (e.g. re-enabling Windows PATH interop) may require adjusting the others.
 
