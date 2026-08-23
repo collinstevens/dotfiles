@@ -6,7 +6,7 @@ fields=$(jq -r '[
 	(.effort.level // "default"),
 	(if .fast_mode then "fast" else "" end),
 	(.permissionMode // .permission_mode // ""),
-	(.context_window.total_input_tokens // 0 | round),
+	(.context_window.used_percentage // 0 | round),
 	(.rate_limits.five_hour.used_percentage // "" | if . == "" then "" else 100 - . | round end),
 	(.rate_limits.seven_day.used_percentage // "" | if . == "" then "" else 100 - . | round end),
 	(.pr.number // ""),
@@ -15,7 +15,7 @@ fields=$(jq -r '[
 	(.workspace.repo.name // (.workspace.project_dir // "" | if . == "" then "" else split("/") | last end))
 ] | map(tostring) | join("\u001f")')
 
-IFS=$'\x1f' read -r model effort fast permission_mode tokens_used five_hour_left weekly_left pr_number pr_url work_dir project_name <<< "$fields"
+IFS=$'\x1f' read -r model effort fast permission_mode context_used five_hour_left weekly_left pr_number pr_url work_dir project_name <<< "$fields"
 
 esc=$'\e'
 reset="${esc}[0m"
@@ -37,13 +37,7 @@ if [ -n "$model" ]; then
 fi
 
 [ -n "$permission_mode" ] && segments+=("${mauve}${permission_mode}${reset}")
-if [ "$tokens_used" -ge 1000 ]; then
-	tokens_used_hundredths=$(( (tokens_used + 5) / 10 ))
-	printf -v tokens_used_text '%d.%02dK used' "$((tokens_used_hundredths / 100))" "$((tokens_used_hundredths % 100))"
-else
-	tokens_used_text="${tokens_used} used"
-fi
-segments+=("${peach}${tokens_used_text}${reset}")
+segments+=("${peach}Context ${context_used}% used${reset}")
 [ -n "$five_hour_left" ] && segments+=("${red}5h ${five_hour_left}% left${reset}")
 [ -n "$weekly_left" ] && segments+=("${red}weekly ${weekly_left}% left${reset}")
 
