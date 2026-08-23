@@ -41,7 +41,12 @@ if ($permissionMode) { $segments += "$mauve$permissionMode$reset" }
 
 $tokensUsed = Get-Prop (Get-Prop $data 'context_window') 'total_input_tokens'
 if ($null -eq $tokensUsed) { $tokensUsed = 0 }
-$segments += ($peach + ("Context {0:N0} tokens used" -f [double]$tokensUsed) + $reset)
+$tokensUsedText = if ([double]$tokensUsed -ge 1000) {
+    [string]::Format([Globalization.CultureInfo]::InvariantCulture, '{0:0.00}K used', ([double]$tokensUsed / 1000))
+} else {
+    ("{0:N0} used" -f [double]$tokensUsed)
+}
+$segments += $peach + $tokensUsedText + $reset
 
 $rateLimits = Get-Prop $data 'rate_limits'
 $fiveHourUsed = Get-Prop (Get-Prop $rateLimits 'five_hour') 'used_percentage'

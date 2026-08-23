@@ -37,7 +37,13 @@ if [ -n "$model" ]; then
 fi
 
 [ -n "$permission_mode" ] && segments+=("${mauve}${permission_mode}${reset}")
-segments+=("${peach}Context ${tokens_used} tokens used${reset}")
+if [ "$tokens_used" -ge 1000 ]; then
+	tokens_used_hundredths=$(( (tokens_used + 5) / 10 ))
+	printf -v tokens_used_text '%d.%02dK used' "$((tokens_used_hundredths / 100))" "$((tokens_used_hundredths % 100))"
+else
+	tokens_used_text="${tokens_used} used"
+fi
+segments+=("${peach}${tokens_used_text}${reset}")
 [ -n "$five_hour_left" ] && segments+=("${red}5h ${five_hour_left}% left${reset}")
 [ -n "$weekly_left" ] && segments+=("${red}weekly ${weekly_left}% left${reset}")
 
