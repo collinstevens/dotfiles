@@ -6,10 +6,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 mkdir -p "$HOME/.local/bin"
 export PATH="$HOME/.local/bin:$PATH"
 
+if ! command -v starship >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/starship" ]; then
+    curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"
+fi
+
 links=(
     ".bashrc:$HOME/.bashrc"
     ".gitconfig:$HOME/.gitconfig"
     ".gitignore-global:$HOME/.gitignore-global"
+    ".config/starship-linux.toml:$HOME/.config/starship.toml"
 )
 
 system_files=(

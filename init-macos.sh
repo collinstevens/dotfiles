@@ -3,6 +3,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+if ! command -v starship >/dev/null 2>&1; then
+    brew install starship
+fi
+
 links=(
     ".zshrc:$HOME/.zshrc"
     ".zprofile:$HOME/.zprofile"
@@ -10,6 +14,7 @@ links=(
     ".gitconfig-macos:$HOME/.gitconfig-macos"
     ".gitignore-global:$HOME/.gitignore-global"
     "linearmouse/linearmouse.json:$HOME/.config/linearmouse/linearmouse.json"
+    ".config/starship-macos.toml:$HOME/.config/starship.toml"
 )
 
 for link in "${links[@]}"; do

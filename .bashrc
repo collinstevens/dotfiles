@@ -122,5 +122,7 @@ export COLORTERM=truecolor
 # Amp CLI
 export PATH="$HOME/.amp/bin:$PATH"
 
+command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
+
 # Allow `code .` from WSL without importing the entire Windows PATH
 export PATH="$PATH:/mnt/c/Program Files/Microsoft VS Code/bin"

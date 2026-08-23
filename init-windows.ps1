@@ -1,5 +1,42 @@
 $ErrorActionPreference = "Stop"
 
+function Update-ProcessPath {
+    $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+    $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+    $env:Path = (@($machinePath, $userPath) | Where-Object { $_ }) -join ";"
+}
+
+function Install-WingetPackage {
+    param(
+        [string]$Id,
+        [string]$Command,
+        [string]$Name
+    )
+
+    if (Get-Command $Command -CommandType Application -ErrorAction SilentlyContinue) {
+        return
+    }
+
+    if (-not (Get-Command winget.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+        Write-Error "Error: winget.exe is required to install $Name"
+        exit 1
+    }
+
+    & winget.exe install --id $Id --exact --source winget --accept-package-agreements --accept-source-agreements
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Error: unable to install $Name"
+        exit 1
+    }
+
+    Update-ProcessPath
+    if (-not (Get-Command $Command -CommandType Application -ErrorAction SilentlyContinue)) {
+        Write-Error "Error: $Name was installed but $Command is not available"
+        exit 1
+    }
+}
+
+Update-ProcessPath
+
 function Copy-WslSystemFile {
     param(
         [string]$Source,
@@ -38,6 +75,8 @@ function Copy-WslSystemFile {
 
     Write-Host "Copied: $sourceFile -> wsl:$Target"
 }
+
+Install-WingetPackage -Id "Starship.Starship" -Command "starship" -Name "Starship"
 
 $hackInstalled = $false
 $hackFontRegistryName = "HackNerdFont-Regular (TrueType)"
@@ -88,6 +127,7 @@ $links = @(
     @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
     @{ Source = ".gitignore-global"; Target = "$HOME\.gitignore-global" },
     @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
+    @{ Source = ".config\starship-windows.toml"; Target = "$HOME\.config\starship-windows.toml" },
     @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }
 )
 
