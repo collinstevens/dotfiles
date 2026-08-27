@@ -9,6 +9,7 @@
 	autocrlf = false
 	eol = lf
 	safecrlf = warn
+	longpaths = true
 
 [init]
 	defaultBranch = master
