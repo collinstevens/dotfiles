@@ -78,6 +78,10 @@ function Copy-WslSystemFile {
 
 Install-WingetPackage -Id "Starship.Starship" -Command "starship" -Name "Starship"
 
+if (-not (Get-Module -ListAvailable -Name posh-git)) {
+    Install-PSResource -Name posh-git -Scope CurrentUser -TrustRepository
+}
+
 $hackInstalled = $false
 $hackFontRegistryName = "HackNerdFont-Regular (TrueType)"
 $fontRegistryPaths = @(
