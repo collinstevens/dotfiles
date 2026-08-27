@@ -1,0 +1,11 @@
+default_permissions = "workspace_gitignore"
+
+[permissions.workspace_gitignore]
+description = "Workspace access with Git's global ignore file readable."
+extends = ":workspace"
+
+[permissions.workspace_gitignore.filesystem]
+__GIT_IGNORE_PATH__ = "read"
+
+[permissions.workspace_gitignore.network]
+enabled = true

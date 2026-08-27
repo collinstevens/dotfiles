@@ -1,0 +1,7 @@
+prefix_rule(pattern = ["rg"], decision = "allow")
+prefix_rule(pattern = ["git", "status"], decision = "allow")
+prefix_rule(
+    pattern = ["gh"],
+    decision = "prompt",
+    justification = "GitHub CLI credentials may require access to the host keyring outside the sandbox",
+)
