@@ -1,8 +1,41 @@
 $ErrorActionPreference = "Stop"
 
-$machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
-$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
-$env:Path = (@($machinePath, $userPath) | Where-Object { $_ }) -join ";"
+function Update-ProcessPath {
+    $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+    $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+    $env:Path = (@($machinePath, $userPath) | Where-Object { $_ }) -join ";"
+}
+
+function Install-WingetPackage {
+    param(
+        [string]$Id,
+        [string]$Command,
+        [string]$Name
+    )
+
+    if (Get-Command $Command -CommandType Application -ErrorAction SilentlyContinue) {
+        return
+    }
+
+    if (-not (Get-Command winget.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+        Write-Error "Error: winget.exe is required to install $Name"
+        exit 1
+    }
+
+    & winget.exe install --id $Id --exact --source winget --accept-package-agreements --accept-source-agreements
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Error: unable to install $Name"
+        exit 1
+    }
+
+    Update-ProcessPath
+    if (-not (Get-Command $Command -CommandType Application -ErrorAction SilentlyContinue)) {
+        Write-Error "Error: $Name was installed but $Command is not available"
+        exit 1
+    }
+}
+
+Update-ProcessPath
 
 function Copy-WslSystemFile {
     param(
@@ -43,18 +76,8 @@ function Copy-WslSystemFile {
     Write-Host "Copied: $sourceFile -> wsl:$Target"
 }
 
-if (-not (Get-Command starship -CommandType Application -ErrorAction SilentlyContinue)) {
-    if (-not (Get-Command winget.exe -CommandType Application -ErrorAction SilentlyContinue)) {
-        Write-Error "Error: winget.exe is required to install Starship"
-        exit 1
-    }
-
-    & winget.exe install --id Starship.Starship --exact --source winget --accept-package-agreements --accept-source-agreements
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Error: unable to install Starship"
-        exit 1
-    }
-}
+Install-WingetPackage -Id "Starship.Starship" -Command "starship" -Name "Starship"
+Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
 
 if (-not (Get-Module -ListAvailable -Name posh-git)) {
     Install-PSResource -Name posh-git -Scope CurrentUser -TrustRepository

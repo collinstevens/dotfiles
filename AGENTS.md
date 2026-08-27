@@ -16,7 +16,7 @@ Commit and push changes directly to `master` for this dotfiles repository. Do no
 - Linux / WSL: `./init-linux.sh`
 - macOS: `./init-macos.sh`
 
-The scripts **copy** (not symlink) each source file to its target in `$HOME` or a system path, removing any existing target first. They also use Mise-managed `yq` to merge `.codex/permissions.toml` into `$HOME/.codex/config.toml` without storing or replacing the full machine-specific config. After editing a dotfile here, re-run the relevant installer to propagate the change. Adding a new dotfile requires adding it to the applicable installer's `links` collection because the scripts do not auto-discover files.
+The scripts **copy** (not symlink) each source file to its target in `$HOME` or a system path, removing any existing target first. They also install native `yq` and use it to merge `.codex/permissions.toml` into `$HOME/.codex/config.toml` without storing or replacing the full machine-specific config. After editing a dotfile here, re-run the relevant installer to propagate the change. Adding a new dotfile requires adding it to the applicable installer's `links` collection because the scripts do not auto-discover files.
 
 ## Architecture
 

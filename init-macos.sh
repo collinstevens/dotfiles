@@ -7,6 +7,10 @@ if ! command -v starship >/dev/null 2>&1; then
     brew install starship
 fi
 
+if ! command -v yq >/dev/null 2>&1; then
+    brew install yq
+fi
+
 links=(
     ".zshrc:$HOME/.zshrc"
     ".zprofile:$HOME/.zprofile"

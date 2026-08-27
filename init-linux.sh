@@ -4,9 +4,32 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 mkdir -p "$HOME/.local/bin"
+export PATH="$HOME/.local/bin:$PATH"
 
 if ! command -v starship >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/starship" ]; then
     curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"
+fi
+
+if ! command -v yq >/dev/null 2>&1; then
+    case "$(uname -m)" in
+        x86_64) yq_arch="amd64" ;;
+        aarch64|arm64) yq_arch="arm64" ;;
+        armv7l) yq_arch="arm" ;;
+        i386|i686) yq_arch="386" ;;
+        *)
+            echo "Error: unsupported architecture for yq: $(uname -m)" >&2
+            exit 1
+            ;;
+    esac
+
+    yq_download="$(mktemp)"
+    if ! curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${yq_arch}" -o "$yq_download"; then
+        rm -f "$yq_download"
+        echo "Error: unable to download yq" >&2
+        exit 1
+    fi
+    install -m 0755 "$yq_download" "$HOME/.local/bin/yq"
+    rm -f "$yq_download"
 fi
 
 links=(

@@ -10,8 +10,9 @@ $permissionsPath = Join-Path $PSScriptRoot "permissions.toml"
 $configDirectory = Split-Path -Parent $ConfigPath
 $mergeExpression = '((select(fileIndex == 0) // {}) | del(.sandbox_workspace_write, .permissions.workspace_gitignore)) * (select(fileIndex == 1)) * (select(fileIndex == 2) | .permissions.workspace_gitignore.filesystem = {(strenv(GIT_IGNORE_PATH)): "read"})'
 
-if (-not (Get-Command mise -ErrorAction SilentlyContinue)) {
-    throw "mise is required to update $ConfigPath"
+$yqCommand = Get-Command yq -CommandType Application -ErrorAction SilentlyContinue
+if (-not $yqCommand) {
+    throw "yq is required to update $ConfigPath"
 }
 foreach ($fragmentPath in @($managedConfigPath, $permissionsPath)) {
     if (-not (Test-Path -LiteralPath $fragmentPath)) {
@@ -19,14 +20,7 @@ foreach ($fragmentPath in @($managedConfigPath, $permissionsPath)) {
     }
 }
 
-& mise install yq@latest
-if ($LASTEXITCODE -ne 0) {
-    throw "Unable to install yq@latest with mise"
-}
-$yqPath = & mise which yq --tool yq@latest
-if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $yqPath)) {
-    throw "Unable to resolve yq@latest with mise"
-}
+$yqPath = $yqCommand.Source
 
 New-Item -ItemType Directory -Path $configDirectory -Force | Out-Null
 if (-not (Test-Path -LiteralPath $ConfigPath)) {
