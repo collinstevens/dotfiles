@@ -12,6 +12,10 @@ if ! command -v starship >/dev/null 2>&1; then
     brew install starship
 fi
 
+if ! command -v yq >/dev/null 2>&1; then
+    brew install yq
+fi
+
 links=(
     ".zshrc:$HOME/.zshrc"
     ".zprofile:$HOME/.zprofile"
@@ -22,6 +26,7 @@ links=(
     ".claude/settings-unix.json:$HOME/.claude/settings.json"
     ".claude/statusline-command.sh:$HOME/.claude/statusline-command.sh"
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
+    ".codex/rules/default.rules:$HOME/.codex/rules/default.rules"
     ".config/starship-macos.toml:$HOME/.config/starship.toml"
 )
 
@@ -59,5 +64,7 @@ load_launchagent com.collin.swap-fn-ctrl
 
 defaults import com.googlecode.iterm2 "$SCRIPT_DIR/iterm2/com.googlecode.iterm2.plist"
 echo "Imported: iterm2/com.googlecode.iterm2.plist -> com.googlecode.iterm2"
+
+bash "$SCRIPT_DIR/.codex/configure.sh"
 
 echo "Done."

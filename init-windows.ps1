@@ -77,6 +77,7 @@ function Copy-WslSystemFile {
 }
 
 Install-WingetPackage -Id "Starship.Starship" -Command "starship" -Name "Starship"
+Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
 Install-WingetPackage -Id "jdx.mise" -Command "mise" -Name "mise"
 
 $miseDataDirectory = if ($env:MISE_DATA_DIR) { $env:MISE_DATA_DIR } else { Join-Path $env:LOCALAPPDATA "mise" }
@@ -143,6 +144,7 @@ $links = @(
     @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
     @{ Source = ".claude\settings-windows.json"; Target = "$HOME\.claude\settings.json" },
     @{ Source = ".claude\statusline-command.ps1"; Target = "$HOME\.claude\statusline-command.ps1" },
+    @{ Source = ".codex\rules\default.rules"; Target = "$HOME\.codex\rules\default.rules" },
     @{ Source = ".config\starship-windows.toml"; Target = "$HOME\.config\starship-windows.toml" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
     @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }
@@ -177,6 +179,8 @@ foreach ($link in $links) {
     Copy-Item -Path $sourceFile -Destination $target
     Write-Host "Copied: $sourceFile -> $target"
 }
+
+& (Join-Path $PSScriptRoot ".codex\configure.ps1")
 
 Copy-WslSystemFile -Source "wsl.conf" -Target "/etc/wsl.conf"
 
