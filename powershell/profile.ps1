@@ -14,6 +14,8 @@ if (-not $starshipExe) {
 }
 Invoke-Expression (& $starshipExe init powershell)
 
+Import-Module posh-git
+
 $null = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -MaxTriggerCount 1 -Action {
     Set-PSReadLineOption -BellStyle None
 
