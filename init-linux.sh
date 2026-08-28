@@ -33,7 +33,9 @@ links=(
     ".bashrc:$HOME/.bashrc"
     ".gitconfig:$HOME/.gitconfig"
     ".gitignore-global:$HOME/.gitignore-global"
+    ".claude/settings-unix.json:$HOME/.claude/settings.json"
     ".config/starship-linux.toml:$HOME/.config/starship.toml"
+    ".claude/keybindings.json:$HOME/.claude/keybindings.json"
 )
 
 system_files=(
