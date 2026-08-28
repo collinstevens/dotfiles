@@ -74,6 +74,7 @@ cddir() {
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias cj='container=lxc firejail --profile=~/claude.firejail.profile --read-write=$PWD claude --dangerously-skip-permissions'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -147,6 +148,8 @@ export COLORTERM=truecolor
 
 # Amp CLI
 export PATH="$HOME/.amp/bin:$PATH"
+
+export CLAUDE_CONFIG_DIR="$HOME/.claude"
 
 command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
 

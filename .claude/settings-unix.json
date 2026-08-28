@@ -1,0 +1,18 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "autoMemoryEnabled": false,
+  "model": "fable",
+  "effortLevel": "high",
+  "autoUpdatesChannel": "latest",
+  "tui": "default",
+  "theme": "dark-ansi",
+  "switchModelsOnFlag": false,
+  "disableClaudeAiConnectors": true,
+  "skipDangerousModePermissionPrompt": true
+}
