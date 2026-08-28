@@ -13,6 +13,7 @@
   "tui": "default",
   "theme": "dark-ansi",
   "switchModelsOnFlag": false,
+  "disableClaudeAiConnectors": true,
   "skipDangerousModePermissionPrompt": true,
   "statusLine": {
     "type": "command",
