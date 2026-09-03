@@ -48,6 +48,14 @@ links=(
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
 )
 
+skill_links=(
+    "vendor/humanlayer-skills/plugins/show-me/skills/show-me:$HOME/.claude/skills/show-me"
+    "vendor/humanlayer-skills/plugins/show-me/skills/show-me:$HOME/.codex/skills/show-me"
+    "vendor/humanlayer-skills/plugins/show-me/skills/show-me:$HOME/.grok/skills/show-me"
+)
+
+git -C "$SCRIPT_DIR" submodule update --init --recursive -- vendor/humanlayer-skills
+
 system_files=(
     "wsl.conf:/etc/wsl.conf"
 )
@@ -69,6 +77,25 @@ for link in "${links[@]}"; do
     mkdir -p "$(dirname "$target")"
     cp "$source_file" "$target"
     echo "Copied: $source_file -> $target"
+done
+
+for link in "${skill_links[@]}"; do
+    source_directory="${SCRIPT_DIR}/${link%%:*}"
+    target="${link##*:}"
+
+    if [ ! -d "$source_directory" ]; then
+        echo "Error: Source directory not found: $source_directory" >&2
+        exit 1
+    fi
+
+    if [ -e "$target" ] || [ -L "$target" ]; then
+        rm -rf "$target"
+        echo "Removed existing: $target"
+    fi
+
+    mkdir -p "$(dirname "$target")"
+    cp -R "$source_directory" "$target"
+    echo "Copied: $source_directory -> $target"
 done
 
 for link in "${system_files[@]}"; do

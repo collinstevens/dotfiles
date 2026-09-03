@@ -145,6 +145,18 @@ $links = @(
     @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }
 )
 
+$skillLinks = @(
+    @{ Source = "vendor\humanlayer-skills\plugins\show-me\skills\show-me"; Target = "$HOME\.claude\skills\show-me" },
+    @{ Source = "vendor\humanlayer-skills\plugins\show-me\skills\show-me"; Target = "$HOME\.codex\skills\show-me" },
+    @{ Source = "vendor\humanlayer-skills\plugins\show-me\skills\show-me"; Target = "$HOME\.grok\skills\show-me" }
+)
+
+& git -C $PSScriptRoot submodule update --init --recursive -- vendor/humanlayer-skills
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Error: unable to initialize the humanlayer skills submodule"
+    exit 1
+}
+
 $pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
 if ($pkg) {
     $wtSettingsTarget = Join-Path $env:LOCALAPPDATA "Packages\$($pkg.PackageFamilyName)\LocalState\settings.json"
@@ -173,6 +185,28 @@ foreach ($link in $links) {
     }
     Copy-Item -Path $sourceFile -Destination $target
     Write-Host "Copied: $sourceFile -> $target"
+}
+
+foreach ($link in $skillLinks) {
+    $sourceDirectory = Join-Path $PSScriptRoot $link.Source
+    $target = $link.Target
+
+    if (-not (Test-Path -PathType Container $sourceDirectory)) {
+        Write-Error "Error: Source directory not found: $sourceDirectory"
+        exit 1
+    }
+
+    if (Test-Path $target) {
+        Remove-Item $target -Recurse -Force
+        Write-Host "Removed existing: $target"
+    }
+
+    $targetDir = Split-Path -Parent $target
+    if (-not (Test-Path $targetDir)) {
+        New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+    }
+    Copy-Item -Path $sourceDirectory -Destination $target -Recurse
+    Write-Host "Copied: $sourceDirectory -> $target"
 }
 
 & (Join-Path $PSScriptRoot ".codex\configure.ps1")
