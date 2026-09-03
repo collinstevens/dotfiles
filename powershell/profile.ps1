@@ -8,6 +8,7 @@ if ($miseExe) {
     . $miseCache
 }
 
+$env:STARSHIP_CONFIG = Join-Path $HOME ".config\starship-windows.toml"
 $starshipExe = (Get-Command starship -CommandType Application -ErrorAction SilentlyContinue).Source
 if (-not $starshipExe) {
     $starshipExe = Join-Path $env:ProgramFiles "starship\bin\starship.exe"
