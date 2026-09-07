@@ -14,6 +14,28 @@ $null = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -MaxTriggerCoun
     Set-PSReadLineOption -BellStyle None
 }
 
+function mktemp {
+    param([string]$Prefix)
+    [System.IO.Directory]::CreateTempSubdirectory($Prefix).FullName
+}
+
+function cddir {
+    param(
+        [Parameter(Mandatory, Position = 0)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Path
+    )
+
+    $directoryPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
+    $directory = [System.IO.Directory]::CreateDirectory($directoryPath)
+    Set-Location -LiteralPath $directory.FullName
+}
+
+function cdtemp {
+    param([string]$Prefix)
+    Set-Location -Path (mktemp $Prefix)
+}
+
 function reloadenv {
     $machineEnvironment = [Environment]::GetEnvironmentVariables("Machine")
     $userEnvironment = [Environment]::GetEnvironmentVariables("User")
