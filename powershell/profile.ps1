@@ -1,3 +1,13 @@
+$miseExe = (Get-Command mise -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1).Source
+if ($miseExe) {
+    $miseCache = Join-Path $env:LOCALAPPDATA "mise-activate.cached.ps1"
+    if (-not (Test-Path $miseCache) -or
+        (Get-Item $miseCache).LastWriteTime -lt (Get-Item $miseExe).LastWriteTime) {
+        & $miseExe activate pwsh | Where-Object { $_ -ne '_mise_hook' } | Set-Content $miseCache
+    }
+    . $miseCache
+}
+
 $env:STARSHIP_CONFIG = Join-Path $HOME ".config\starship-windows.toml"
 $starshipExe = (Get-Command starship -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1).Source
 if (-not $starshipExe) {
@@ -12,6 +22,10 @@ Set-Alias -Name gbash -Value (Join-Path $gitInstallDirectory "bin\bash.exe")
 
 $null = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -MaxTriggerCount 1 -Action {
     Set-PSReadLineOption -BellStyle None
+
+    if (Test-Path Function:\_mise_hook) {
+        _mise_hook
+    }
 }
 
 function mktemp {
@@ -53,4 +67,8 @@ function reloadenv {
     $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
     $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
     $env:Path = (@($machinePath, $userPath) | Where-Object { $_ }) -join ";"
+
+    if (Test-Path Function:\_mise_hook) {
+        _mise_hook
+    }
 }

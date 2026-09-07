@@ -6,6 +6,25 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 mkdir -p "$HOME/.local/bin"
 export PATH="$HOME/.local/bin:$PATH"
 
+if ! command -v mise >/dev/null 2>&1; then
+    curl -fsSL https://mise.run | sh
+fi
+mise --version
+
+mise_path_line='export PATH="${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims:$HOME/.local/bin:$PATH"'
+bash_login_profile="$HOME/.profile"
+for profile in "$HOME/.bash_profile" "$HOME/.bash_login" "$HOME/.profile"; do
+    if [ -f "$profile" ]; then
+        bash_login_profile="$profile"
+        break
+    fi
+done
+for profile in "$HOME/.profile" "$bash_login_profile"; do
+    if ! grep -Fqx "$mise_path_line" "$profile" 2>/dev/null; then
+        printf '\n%s\n' "$mise_path_line" >> "$profile"
+    fi
+done
+
 if ! command -v starship >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/starship" ]; then
     curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"
 fi

@@ -4,7 +4,7 @@ case $- in
       *) return;;
 esac
 
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims:$HOME/.local/bin:$PATH"
 
 if [[ "$PWD" == "$HOME" && -d "$HOME/projects" ]]; then
     cd "$HOME/projects"
@@ -87,6 +87,8 @@ if ! shopt -oq posix; then
 fi
 
 eval "$(gh completion -s bash)"
+
+command -v mise >/dev/null 2>&1 && eval "$(mise activate bash)"
 
 SSH_ENV="$HOME/.ssh/agent-environment"
 SSH_KEY="$HOME/.ssh/id_ed25519"
