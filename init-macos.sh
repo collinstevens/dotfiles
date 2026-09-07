@@ -3,6 +3,11 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+if ! command -v mise >/dev/null 2>&1; then
+    brew install mise
+fi
+mise --version
+
 if ! command -v starship >/dev/null 2>&1; then
     brew install starship
 fi

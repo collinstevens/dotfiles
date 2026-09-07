@@ -77,6 +77,16 @@ function Copy-WslSystemFile {
 }
 
 Install-WingetPackage -Id "Starship.Starship" -Command "starship" -Name "Starship"
+Install-WingetPackage -Id "jdx.mise" -Command "mise" -Name "mise"
+
+$miseDataDirectory = if ($env:MISE_DATA_DIR) { $env:MISE_DATA_DIR } else { Join-Path $env:LOCALAPPDATA "mise" }
+$miseShims = Join-Path $miseDataDirectory "shims"
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+$userPathEntries = @($userPath -split ";" | Where-Object {
+    $_ -and [Environment]::ExpandEnvironmentVariables($_).TrimEnd('\') -ine $miseShims.TrimEnd('\')
+})
+[Environment]::SetEnvironmentVariable("Path", (@($miseShims) + $userPathEntries) -join ";", "User")
+Update-ProcessPath
 
 if (-not (Get-Module -ListAvailable -Name posh-git)) {
     Install-PSResource -Name posh-git -Scope CurrentUser -TrustRepository
