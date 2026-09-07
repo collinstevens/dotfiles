@@ -47,6 +47,30 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
+mktemp() {
+    if [ "$#" -gt 1 ]; then
+        printf 'Usage: mktemp [prefix]\n' >&2
+        return 1
+    fi
+
+    command mktemp -d "${TMPDIR:-/tmp}/${1:-}XXXXXXXXXX"
+}
+
+cdtemp() {
+    local directory
+    directory=$(mktemp "$@") || return
+    builtin cd -- "$directory"
+}
+
+cddir() {
+    if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+        printf 'Usage: cddir <directory>\n' >&2
+        return 1
+    fi
+
+    mkdir -p -- "$1" && builtin cd -- "$1"
+}
+
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
