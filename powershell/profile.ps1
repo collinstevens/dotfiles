@@ -7,6 +7,9 @@ Invoke-Expression (& $starshipExe init powershell)
 
 Import-Module posh-git
 
+$gitInstallDirectory = Split-Path (Split-Path (Get-Command git.exe -CommandType Application | Select-Object -First 1).Source -Parent) -Parent
+Set-Alias -Name gbash -Value (Join-Path $gitInstallDirectory "bin\bash.exe")
+
 $null = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -MaxTriggerCount 1 -Action {
     Set-PSReadLineOption -BellStyle None
 }
