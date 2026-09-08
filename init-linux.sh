@@ -53,4 +53,10 @@ for link in "${system_files[@]}"; do
     echo "Copied: $source_file -> $target"
 done
 
+ptyxis_conf="${SCRIPT_DIR}/ptyxis.conf"
+if [ -f "$ptyxis_conf" ] && command -v dconf >/dev/null 2>&1; then
+    dconf load /org/gnome/Ptyxis/ < "$ptyxis_conf"
+    echo "Loaded Ptyxis settings: $ptyxis_conf"
+fi
+
 echo "Done."
