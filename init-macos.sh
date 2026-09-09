@@ -3,6 +3,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+if ! command -v tmux >/dev/null 2>&1; then
+    brew install tmux
+fi
+
 if ! command -v mise >/dev/null 2>&1; then
     brew install mise
 fi

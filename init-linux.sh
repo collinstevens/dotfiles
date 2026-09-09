@@ -6,6 +6,29 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 mkdir -p "$HOME/.local/bin"
 export PATH="$HOME/.local/bin:$PATH"
 
+if ! command -v tmux >/dev/null 2>&1; then
+    if command -v apt-get >/dev/null 2>&1; then
+        tmux_install=(apt-get install -y tmux)
+    elif command -v dnf >/dev/null 2>&1; then
+        tmux_install=(dnf install -y tmux)
+    elif command -v pacman >/dev/null 2>&1; then
+        tmux_install=(pacman -S --needed --noconfirm tmux)
+    elif command -v zypper >/dev/null 2>&1; then
+        tmux_install=(zypper --non-interactive install tmux)
+    elif command -v apk >/dev/null 2>&1; then
+        tmux_install=(apk add tmux)
+    else
+        echo "Error: no supported package manager found; install tmux and rerun this script" >&2
+        exit 1
+    fi
+
+    if [ "$EUID" -eq 0 ]; then
+        "${tmux_install[@]}"
+    else
+        sudo "${tmux_install[@]}"
+    fi
+fi
+
 if ! command -v mise >/dev/null 2>&1; then
     curl -fsSL https://mise.run | sh
 fi
