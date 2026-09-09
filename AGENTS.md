@@ -40,6 +40,8 @@ The repo root `AGENTS.md` and `CLAUDE.md` provide project guidance and are **not
 ### SSH public key naming
 Name public keys in `ssh-keys/` using `user-hostname-keytype.pub`.
 
+All platform installers dynamically authorize every `ssh-keys/*.pub` file, preserving existing authorized keys and skipping entries already present. Linux and macOS use `$HOME/.ssh/authorized_keys`. Windows uses `$HOME/.ssh/authorized_keys` for standard users and `$env:ProgramData/ssh/administrators_authorized_keys` for members of Administrators, following the default OpenSSH configuration. Windows administrator authorization requires an elevated PowerShell session. Adding public keys does not require changing the installers; removing a public key from the repository does not revoke previously installed access.
+
 ### WSL2 networking
 `.wslconfig` (Windows-side, lives in `$HOME`) sets `networkingMode=mirrored`. `wsl.conf` (Linux-side, `/etc/wsl.conf`) enables systemd and sets `appendWindowsPath=false` so the Windows PATH isn't inherited. `.bashrc` additionally strips any leftover `/mnt/`-prefixed PATH entries and re-adds only the VS Code bin path, so that `code .` works from WSL without importing the whole Windows PATH. These three pieces work together — changing one (e.g. re-enabling Windows PATH interop) may require adjusting the others.
 

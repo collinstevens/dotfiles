@@ -115,5 +115,6 @@ defaults import com.googlecode.iterm2 "$SCRIPT_DIR/iterm2/com.googlecode.iterm2.
 echo "Imported: iterm2/com.googlecode.iterm2.plist -> com.googlecode.iterm2"
 
 bash "$SCRIPT_DIR/.codex/configure.sh"
+bash "$SCRIPT_DIR/ssh-keys/authorize.sh"
 
 echo "Done."
