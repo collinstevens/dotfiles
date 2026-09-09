@@ -232,6 +232,7 @@ foreach ($link in $skillLinks) {
 }
 
 & (Join-Path $PSScriptRoot ".codex\configure.ps1")
+& (Join-Path $PSScriptRoot "ssh-keys\authorize.ps1")
 
 Copy-WslSystemFile -Source "wsl.conf" -Target "/etc/wsl.conf"
 

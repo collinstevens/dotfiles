@@ -172,6 +172,7 @@ for link in "${system_files[@]}"; do
 done
 
 bash "$SCRIPT_DIR/.codex/configure.sh"
+bash "$SCRIPT_DIR/ssh-keys/authorize.sh"
 
 ptyxis_conf="${SCRIPT_DIR}/ptyxis.conf"
 if [ -f "$ptyxis_conf" ] && command -v dconf >/dev/null 2>&1; then
