@@ -19,6 +19,7 @@ fi
 links=(
     ".zshrc:$HOME/.zshrc"
     ".zprofile:$HOME/.zprofile"
+    ".tmux.conf:$HOME/.tmux.conf"
     ".gitconfig:$HOME/.gitconfig"
     ".gitconfig-macos:$HOME/.gitconfig-macos"
     ".gitignore-global:$HOME/.gitignore-global"

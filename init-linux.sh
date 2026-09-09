@@ -53,6 +53,7 @@ fi
 
 links=(
     ".bashrc:$HOME/.bashrc"
+    ".tmux.conf:$HOME/.tmux.conf"
     ".gitconfig:$HOME/.gitconfig"
     ".gitignore-global:$HOME/.gitignore-global"
     ".claude/settings-unix.json:$HOME/.claude/settings.json"
