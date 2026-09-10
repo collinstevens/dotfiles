@@ -2,10 +2,11 @@
 
 - Don't push to main/master unless asked, branches are chill though.
 - Unless the user says otherwise, when asked to push, usually assume that means a branch if you're currently on main/master, and create a PR if there's not already one for the branch.
-- Before creating or rewriting commits, inspect the effective Git signing configuration.
-- Honor configured signing for every new or rewritten commit, including root commits. Git plumbing commands such as `git commit-tree` require explicit `-S`; do not assume they honor `commit.gpgsign`.
+- Every commit authored by the user or by an agent on the user's behalf must be signed using the user's configured signing key. Before creating or rewriting these commits, inspect the effective Git identity and signing configuration.
+- When squashing, rebasing, amending, or otherwise rewriting the user's commits, sign the resulting commits again. This includes root commits. Ensure the chosen tool enables signing; Git plumbing commands such as `git commit-tree` require explicit `-S` and do not honor `commit.gpgsign`.
 - Never disable signing or silently fall back to unsigned commits. If signing fails, stop and report the blocker.
-- After rewriting history, verify signatures on every rewritten commit before pushing. Preserve commit metadata where practical and verify that the final tracked tree is unchanged from before the rewrite.
+- Successful signing is sufficient. Do not verify the user's or anyone else's commit signatures, configure signature-verification trust (such as SSH allowed-signers files), or report missing verification setup unless the user explicitly asks for signature verification.
+- After rewriting history, preserve commit metadata where practical and verify that the final tracked tree is unchanged from before the rewrite.
 - Keep a local recovery reference before rewriting published history. When pushing rewritten history is authorized, use `--force-with-lease=<ref>:<expected-remote-commit>` with an explicit expected remote commit.
 - Use conventional commits https://www.conventionalcommits.org/en/v1.0.0
 - For PR titles, the title should be a single conventional commit message assuming the commits on the branch will be squash committed
