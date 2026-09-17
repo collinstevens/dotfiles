@@ -35,7 +35,6 @@ Recorded measurements:
 | `startup / telemetry` | Loading and initializing the logger, including retention cleanup |
 | `startup / mise` | Finding mise, refreshing its activation cache if needed, and loading it |
 | `startup / starship` | Finding and initializing Starship, including PSReadLine setup |
-| `startup / posh-git` | Importing posh-git |
 | `startup / git-alias` | Finding Git and configuring the Bash alias |
 | `startup / profile-total` | The whole shared profile, including instrumentation overhead |
 | `startup / process-to-first-prompt` | Process creation through completion of the first prompt render |
