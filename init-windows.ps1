@@ -152,7 +152,8 @@ $links = @(
     @{ Source = ".config\opencode\opencode.jsonc"; Target = "$HOME\.config\opencode\opencode.jsonc" },
     @{ Source = ".config\starship-windows.toml"; Target = "$HOME\.config\starship-windows.toml" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
-    @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts }
+    @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts },
+    @{ Source = "powershell\performance.ps1"; Target = (Join-Path (Split-Path $PROFILE.AllUsersAllHosts -Parent) "performance.ps1") }
 )
 
 $skillLinks = @(
