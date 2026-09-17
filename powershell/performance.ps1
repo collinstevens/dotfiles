@@ -7,7 +7,6 @@ $global:PwshPerformance = @{
     FileDate = ''
     FileBytes = 0L
     FileIndex = 0
-    PromptCount = 0
     LastError = $null
 }
 

@@ -12,10 +12,6 @@ if ! command -v mise >/dev/null 2>&1; then
 fi
 mise --version
 
-if ! command -v starship >/dev/null 2>&1; then
-    brew install starship
-fi
-
 if ! command -v yq >/dev/null 2>&1; then
     brew install yq
 fi
@@ -37,7 +33,6 @@ links=(
     ".grok/config.toml:$HOME/.grok/config.toml"
     "shared/AGENTS.md:$HOME/.grok/AGENTS.md"
     ".config/opencode/opencode.jsonc:$HOME/.config/opencode/opencode.jsonc"
-    ".config/starship-macos.toml:$HOME/.config/starship.toml"
 )
 
 skill_links=(
