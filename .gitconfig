@@ -6,8 +6,6 @@
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore-global
-	autocrlf = false
-	eol = lf
 	safecrlf = warn
 	longpaths = true
 
