@@ -150,30 +150,6 @@ $links = @(
     @{ Source = "powershell\performance.ps1"; Target = (Join-Path (Split-Path $PROFILE.AllUsersAllHosts -Parent) "performance.ps1") }
 )
 
-$skillLinks = @(
-    @{ Source = "vendor\humanlayer-skills\plugins\show-me\skills\show-me"; Target = "$HOME\.claude\skills\show-me" },
-    @{ Source = "vendor\humanlayer-skills\plugins\show-me\skills\show-me"; Target = "$HOME\.codex\skills\show-me" },
-    @{ Source = "vendor\humanlayer-skills\plugins\show-me\skills\show-me"; Target = "$HOME\.grok\skills\show-me" },
-    @{ Source = "vendor\mattpocock-skills\skills\engineering\domain-modeling"; Target = "$HOME\.claude\skills\domain-modeling" },
-    @{ Source = "vendor\mattpocock-skills\skills\engineering\domain-modeling"; Target = "$HOME\.codex\skills\domain-modeling" },
-    @{ Source = "vendor\mattpocock-skills\skills\engineering\domain-modeling"; Target = "$HOME\.grok\skills\domain-modeling" },
-    @{ Source = "vendor\mattpocock-skills\skills\engineering\grill-with-docs"; Target = "$HOME\.claude\skills\grill-with-docs" },
-    @{ Source = "vendor\mattpocock-skills\skills\engineering\grill-with-docs"; Target = "$HOME\.codex\skills\grill-with-docs" },
-    @{ Source = "vendor\mattpocock-skills\skills\engineering\grill-with-docs"; Target = "$HOME\.grok\skills\grill-with-docs" },
-    @{ Source = "vendor\mattpocock-skills\skills\productivity\grill-me"; Target = "$HOME\.claude\skills\grill-me" },
-    @{ Source = "vendor\mattpocock-skills\skills\productivity\grill-me"; Target = "$HOME\.codex\skills\grill-me" },
-    @{ Source = "vendor\mattpocock-skills\skills\productivity\grill-me"; Target = "$HOME\.grok\skills\grill-me" },
-    @{ Source = "vendor\mattpocock-skills\skills\productivity\grilling"; Target = "$HOME\.claude\skills\grilling" },
-    @{ Source = "vendor\mattpocock-skills\skills\productivity\grilling"; Target = "$HOME\.codex\skills\grilling" },
-    @{ Source = "vendor\mattpocock-skills\skills\productivity\grilling"; Target = "$HOME\.grok\skills\grilling" }
-)
-
-& git -C $PSScriptRoot submodule update --init --recursive -- vendor/humanlayer-skills vendor/mattpocock-skills
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Error: unable to initialize skill submodules"
-    exit 1
-}
-
 $pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
 if ($pkg) {
     $wtSettingsTarget = Join-Path $env:LOCALAPPDATA "Packages\$($pkg.PackageFamilyName)\LocalState\settings.json"
@@ -202,28 +178,6 @@ foreach ($link in $links) {
     }
     Copy-Item -Path $sourceFile -Destination $target
     Write-Host "Copied: $sourceFile -> $target"
-}
-
-foreach ($link in $skillLinks) {
-    $sourceDirectory = Join-Path $PSScriptRoot $link.Source
-    $target = $link.Target
-
-    if (-not (Test-Path -PathType Container $sourceDirectory)) {
-        Write-Error "Error: Source directory not found: $sourceDirectory"
-        exit 1
-    }
-
-    if (Test-Path $target) {
-        Remove-Item $target -Recurse -Force
-        Write-Host "Removed existing: $target"
-    }
-
-    $targetDir = Split-Path -Parent $target
-    if (-not (Test-Path $targetDir)) {
-        New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
-    }
-    Copy-Item -Path $sourceDirectory -Destination $target -Recurse
-    Write-Host "Copied: $sourceDirectory -> $target"
 }
 
 & (Join-Path $PSScriptRoot ".codex\configure.ps1")

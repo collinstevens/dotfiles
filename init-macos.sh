@@ -35,26 +35,6 @@ links=(
     ".config/opencode/opencode.jsonc:$HOME/.config/opencode/opencode.jsonc"
 )
 
-skill_links=(
-    "vendor/humanlayer-skills/plugins/show-me/skills/show-me:$HOME/.claude/skills/show-me"
-    "vendor/humanlayer-skills/plugins/show-me/skills/show-me:$HOME/.codex/skills/show-me"
-    "vendor/humanlayer-skills/plugins/show-me/skills/show-me:$HOME/.grok/skills/show-me"
-    "vendor/mattpocock-skills/skills/engineering/domain-modeling:$HOME/.claude/skills/domain-modeling"
-    "vendor/mattpocock-skills/skills/engineering/domain-modeling:$HOME/.codex/skills/domain-modeling"
-    "vendor/mattpocock-skills/skills/engineering/domain-modeling:$HOME/.grok/skills/domain-modeling"
-    "vendor/mattpocock-skills/skills/engineering/grill-with-docs:$HOME/.claude/skills/grill-with-docs"
-    "vendor/mattpocock-skills/skills/engineering/grill-with-docs:$HOME/.codex/skills/grill-with-docs"
-    "vendor/mattpocock-skills/skills/engineering/grill-with-docs:$HOME/.grok/skills/grill-with-docs"
-    "vendor/mattpocock-skills/skills/productivity/grill-me:$HOME/.claude/skills/grill-me"
-    "vendor/mattpocock-skills/skills/productivity/grill-me:$HOME/.codex/skills/grill-me"
-    "vendor/mattpocock-skills/skills/productivity/grill-me:$HOME/.grok/skills/grill-me"
-    "vendor/mattpocock-skills/skills/productivity/grilling:$HOME/.claude/skills/grilling"
-    "vendor/mattpocock-skills/skills/productivity/grilling:$HOME/.codex/skills/grilling"
-    "vendor/mattpocock-skills/skills/productivity/grilling:$HOME/.grok/skills/grilling"
-)
-
-git -C "$SCRIPT_DIR" submodule update --init --recursive -- vendor/humanlayer-skills vendor/mattpocock-skills
-
 for link in "${links[@]}"; do
     source_file="${SCRIPT_DIR}/${link%%:*}"
     target="${link##*:}"
@@ -72,25 +52,6 @@ for link in "${links[@]}"; do
     mkdir -p "$(dirname "$target")"
     cp "$source_file" "$target"
     echo "Copied: $source_file -> $target"
-done
-
-for link in "${skill_links[@]}"; do
-    source_directory="${SCRIPT_DIR}/${link%%:*}"
-    target="${link##*:}"
-
-    if [ ! -d "$source_directory" ]; then
-        echo "Error: Source directory not found: $source_directory" >&2
-        exit 1
-    fi
-
-    if [ -e "$target" ] || [ -L "$target" ]; then
-        rm -rf "$target"
-        echo "Removed existing: $target"
-    fi
-
-    mkdir -p "$(dirname "$target")"
-    cp -R "$source_directory" "$target"
-    echo "Copied: $source_directory -> $target"
 done
 
 load_launchagent() {
