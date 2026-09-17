@@ -24,10 +24,6 @@ Invoke-Expression (& $starshipExe init powershell)
 Write-PwshPerformance -Event startup -Stage starship -DurationMs $pwshStageTimer.Elapsed.TotalMilliseconds
 $pwshStageTimer.Restart()
 
-Import-Module posh-git
-Write-PwshPerformance -Event startup -Stage posh-git -DurationMs $pwshStageTimer.Elapsed.TotalMilliseconds
-$pwshStageTimer.Restart()
-
 $gitInstallDirectory = Split-Path (Split-Path (Get-Command git.exe -CommandType Application | Select-Object -First 1).Source -Parent) -Parent
 Set-Alias -Name gbash -Value (Join-Path $gitInstallDirectory "bin\bash.exe")
 Write-PwshPerformance -Event startup -Stage git-alias -DurationMs $pwshStageTimer.Elapsed.TotalMilliseconds
