@@ -48,10 +48,6 @@ for profile in "$HOME/.profile" "$bash_login_profile"; do
     fi
 done
 
-if ! command -v starship >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/starship" ]; then
-    curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"
-fi
-
 if ! command -v yq >/dev/null 2>&1; then
     case "$(uname -m)" in
         x86_64) yq_arch="amd64" ;;
@@ -87,7 +83,6 @@ links=(
     ".grok/config.toml:$HOME/.grok/config.toml"
     "shared/AGENTS.md:$HOME/.grok/AGENTS.md"
     ".config/opencode/opencode.jsonc:$HOME/.config/opencode/opencode.jsonc"
-    ".config/starship-linux.toml:$HOME/.config/starship.toml"
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
 )
 

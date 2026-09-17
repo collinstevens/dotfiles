@@ -76,7 +76,6 @@ function Copy-WslSystemFile {
     Write-Host "Copied: $sourceFile -> wsl:$Target"
 }
 
-Install-WingetPackage -Id "Starship.Starship" -Command "starship" -Name "Starship"
 Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
 Install-WingetPackage -Id "jdx.mise" -Command "mise" -Name "mise"
 
@@ -146,7 +145,6 @@ $links = @(
     @{ Source = ".grok\config.toml"; Target = "$HOME\.grok\config.toml" },
     @{ Source = "shared\AGENTS.md"; Target = "$HOME\.grok\AGENTS.md" },
     @{ Source = ".config\opencode\opencode.jsonc"; Target = "$HOME\.config\opencode\opencode.jsonc" },
-    @{ Source = ".config\starship-windows.toml"; Target = "$HOME\.config\starship-windows.toml" },
     @{ Source = ".claude\keybindings.json"; Target = "$HOME\.claude\keybindings.json" },
     @{ Source = "powershell\profile.ps1"; Target = $PROFILE.AllUsersAllHosts },
     @{ Source = "powershell\performance.ps1"; Target = (Join-Path (Split-Path $PROFILE.AllUsersAllHosts -Parent) "performance.ps1") }
