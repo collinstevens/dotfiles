@@ -31,5 +31,6 @@
 # Tests
 
 - Never write or commit a new test unless the user explicitly asks for one.
+- Never write tautological tests that merely repeat the implementation or derive expected results from the same logic being tested. Test observable behavior against independently defined expectations so the test can catch a real regression.
 - If a code change breaks an existing test, fix that existing test.
 - Temporary tests are allowed to confirm behavior or validate an assumption, but remove them before committing so they are never left in the tree.
