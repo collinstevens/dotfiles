@@ -34,3 +34,8 @@
 - Never write tautological tests that merely repeat the implementation or derive expected results from the same logic being tested. Test observable behavior against independently defined expectations so the test can catch a real regression.
 - If a code change breaks an existing test, fix that existing test.
 - Temporary tests are allowed to confirm behavior or validate an assumption, but remove them before committing so they are never left in the tree.
+
+# Writing Style
+- Applies to everything written: replies, commit messages, PR descriptions, review comments, docs.
+- Never tack a commentary clause onto a sentence. No `, and that ...`, `, and this ...`, or `, which ...` where the pronoun stands for the whole preceding clause. End the sentence, then state the consequence as its own sentence with a concrete subject.
+- Never use dramatic temporal hinges: `the moment X`, `as sonn as X`, `the day X`, `the second X`. Write `if X` or `when X`.
