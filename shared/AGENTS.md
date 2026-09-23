@@ -31,8 +31,8 @@
 # Tests
 
 - Never write or commit a new test unless the user explicitly asks for one.
-- Never write tautological tests that merely repeat the implementation or derive expected results from the same logic being tested. Test observable behavior against independently defined expectations so the test can catch a real regression.
-- If a code change breaks an existing test, fix that existing test.
+- Avoid tautological tests and change-detector tests that mirror implementation details or derive expected results from the same logic being tested. Test observable behavior against independently defined expectations; refactoring that preserves behavior should not require mechanical test updates.
+- If a code change breaks an existing test, check whether it caught a regression or merely detected an implementation change. Fix regressions; rewrite or remove change-detector tests instead of mechanically updating them.
 - Temporary tests are allowed to confirm behavior or validate an assumption, but remove them before committing so they are never left in the tree.
 
 # Writing Style
