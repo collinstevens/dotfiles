@@ -1,7 +1,3 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Overview
 
 Personal cross-platform dotfiles for Windows (native + Windows Terminal), Linux (WSL2 + GNOME), and macOS (iTerm2 + zsh). There is no build, test, or lint step — the "product" is the set of config files plus platform installers that copy them into place.
@@ -16,7 +12,9 @@ Commit and push changes directly to `master` for this dotfiles repository. Do no
 - Linux / WSL: `./init-linux.sh`
 - macOS: `./init-macos.sh`
 
-The scripts **copy** (not symlink) each source file to its target in `$HOME` or a system path, removing any existing target first. They also install native `yq` and use it to merge `.codex/permissions.toml` into `$HOME/.codex/config.toml` without storing or replacing the full machine-specific config. After editing a dotfile here, re-run the relevant installer to propagate the change. Adding a new dotfile requires adding it to the applicable installer's `links` collection because the scripts do not auto-discover files.
+The scripts **copy** (not symlink) files listed in `links` to their targets, removing existing targets first. System files, LaunchAgents, imported preferences, and merged configuration have separate installation steps. After editing a dotfile here, re-run the relevant installer to propagate the change. Add ordinary copied dotfiles to the applicable installer's `links` collection; Linux system files belong in `system_files`, and other resources need their corresponding installation step.
+
+All installers install native `yq` if needed and invoke `.codex/configure.ps1` or `.codex/configure.sh` to merge `.codex/managed-config.toml` and `.codex/permissions.toml` into `$HOME/.codex/config.toml`. The merge preserves unrelated machine-specific settings, replaces managed values, removes the legacy `sandbox_workspace_write` table, and rebuilds `permissions.workspace_gitignore` with the target machine's Git ignore path. The full machine-specific config is not stored in this repository.
 
 ## Architecture
 
@@ -25,17 +23,18 @@ The scripts **copy** (not symlink) each source file to its target in `$HOME` or 
 - `gitdir/i:C:/` → `.gitconfig-windows` (points SSH/signing at the Windows OpenSSH binaries and configures GitHub credentials)
 - `gitdir:/Users/` → `.gitconfig-macos` (uses `gh` for GitHub credentials)
 
-The shared config disables automatic CRLF conversion, uses LF for normalized text, and warns about irreversible conversions. When changing Git behavior, decide whether it is shared (`.gitconfig`) or platform-specific. Windows and macOS installers copy their platform variants; Linux only needs the shared file.
+The shared config sets `core.safecrlf=warn` to warn about irreversible line-ending conversions. It does not set `core.autocrlf` or `core.eol`, so those settings can come from other Git configuration scopes or Git defaults. When changing Git behavior, decide whether it is shared (`.gitconfig`) or platform-specific. Windows and macOS installers copy their platform variants; Linux only needs the shared file.
 
 ### Line endings are load-bearing
-`.gitattributes` stores text files with LF on every platform, with CRLF reserved for `*.bat` and `*.cmd`. The shared Git config also disables automatic CRLF conversion, preventing shell and shared config files from acquiring platform-dependent endings.
+`.gitattributes` uses `* text=auto eol=lf` to normalize detected text files to LF in Git and check them out with LF on every platform. `*.bat` and `*.cmd` are normalized to LF in Git but checked out with CRLF. The iTerm2 preferences plist is marked `-text` to prevent conversion. These attributes control this repository's line endings independently of `core.autocrlf`.
 
 ### What each installer manages
-- `init-windows.ps1`: shared and Windows Git config, global ignores, WSL config, Windows Claude settings/status line, shared agent/config files, the all-users PowerShell profile, Windows Terminal settings, and `/etc/wsl.conf` inside WSL.
-- `init-linux.sh`: bash, shared Git config, global ignores, Unix Claude settings/status line, shared agent/config files, `/etc/wsl.conf`, and Ptyxis settings.
-- `init-macos.sh`: zsh, shared and macOS Git config, global ignores, Unix Claude settings/status line, shared agent/config files, LinearMouse, the keyboard LaunchAgent, and iTerm2 preferences.
+- All installers: `yq` and `mise` installation as needed, shared Git config and global ignores, shared agent instructions, platform-specific Claude settings/status line, Claude keybindings, Codex rules and merged configuration, Grok and OpenCode configuration, and SSH public key authorization.
+- `init-windows.ps1`: Windows Git config, WSL config, Hack Nerd Font installation, mise shims in the user PATH, the all-users PowerShell profile and performance helper, Windows Terminal settings, and `/etc/wsl.conf` inside the default WSL distribution when available.
+- `init-linux.sh`: bash, tmux installation and configuration, mise shims and `$HOME/.local/bin` in login profile PATH setup, `/etc/wsl.conf`, and Ptyxis settings when `dconf` is available.
+- `init-macos.sh`: zsh configuration and login profile, macOS Git config, tmux installation and configuration, LinearMouse, the keyboard LaunchAgent, and iTerm2 preferences.
 
-The repo root `AGENTS.md` and `CLAUDE.md` provide project guidance and are **not** installed. Maintain shared cross-project instructions in `shared/AGENTS.md`; all platform installers copy it to `$HOME/.codex/AGENTS.md`, `$HOME/.grok/AGENTS.md`, and `$HOME/.claude/CLAUDE.md`.
+The repo root `AGENTS.md` provides project guidance and is **not** installed. Maintain shared cross-project instructions in `shared/AGENTS.md`; all platform installers copy it to `$HOME/.codex/AGENTS.md`, `$HOME/.grok/AGENTS.md`, and `$HOME/.claude/CLAUDE.md`.
 
 ### SSH public key naming
 Name public keys in `ssh-keys/` using `user-hostname-keytype.pub`.
