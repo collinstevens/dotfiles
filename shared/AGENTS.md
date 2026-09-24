@@ -16,6 +16,14 @@
   - No need for a test plan section.
   - Include "fixes ..." for fixing github issues or linear tickets, to autolink.
 
+# Git Worktrees
+
+- When creating a worktree, use the directory specified below for the current agent unless the user explicitly requests another location or has configured an override.
+- Claude Code: use `<repo-root>/.claude/worktrees/<name>`.
+- Grok: use `<repo-root>/.grok/worktrees/<name>`.
+- Codex: use `<repo-root>/.codex/worktrees/<name>`.
+- Resolve `<repo-root>` from the original repository checkout. Do not nest new worktrees inside an existing linked worktree.
+
 # GitHub CLI Authentication
 
 - On Windows, run `gh` commands outside the sandbox from the first attempt because the sandbox cannot access credentials stored in the Windows keyring.
