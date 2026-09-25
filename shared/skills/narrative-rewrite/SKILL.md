@@ -24,5 +24,5 @@ Treat any arguments as extra constraints, such as a base branch or a target comm
 - Leave out fix-ups, reverts, "address feedback" commits, and back-and-forth. Fold every correction into the commit that introduces the code it corrects.
 - Keep mechanical changes apart from behavioral ones. Renames, moves, and formatting get their own commits. Regenerated code gets its own commit when it builds without the change that prompted it. Lock files travel with the manifest change that requires them.
 - You may synthesize intermediate states. A commit can contain code that never existed in the original history, as long as it's a coherent step toward the final tree.
-- Every commit must build. At each commit, build and test the projects it touches. If a step fails, restructure the split. Never leave a broken step.
+- Intermediate commits may fail builds or tests. Build and test the final state; it must build and pass tests.
 - Small means digestible, not atomized. Don't split a change so finely that a commit means nothing on its own.
