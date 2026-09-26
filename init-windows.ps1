@@ -76,6 +76,18 @@ function Copy-WslSystemFile {
     Write-Host "Copied: $sourceFile -> wsl:$Target"
 }
 
+Install-WingetPackage -Id "Git.Git" -Command "git" -Name "Git"
+Install-WingetPackage -Id "GitHub.cli" -Command "gh" -Name "GitHub CLI"
+
+& gh stack --help *> $null
+if ($LASTEXITCODE -ne 0) {
+    & gh extension install github/gh-stack
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Error: unable to install the gh stack extension"
+        exit 1
+    }
+}
+
 Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
 Install-WingetPackage -Id "jdx.mise" -Command "mise" -Name "mise"
 

@@ -16,6 +16,15 @@
   - No need for a test plan section.
   - Include "fixes ..." for fixing github issues or linear tickets, to autolink.
 
+# GitHub Stacked Pull Requests
+
+- GitHub has native support for stacked pull requests. When working with stacked branches or stacked PRs on GitHub, prefer GitHub's official `gh stack` CLI extension. Install it if needed with `gh extension install github/gh-stack`.
+- A stack is an ordered chain of dependent PRs: the bottom PR targets the trunk branch, and each higher PR targets the branch below it. GitHub links the PRs as a stack and shows the diff for each layer. All branches must be in the same repository; cross-fork stacks are unsupported.
+- Use `gh stack init [branches...]` to create a stack or adopt existing branches, `gh stack add <branch>` to add a layer, and `gh stack checkout` / `view` / `up` / `down` to inspect and navigate stacks. `gh stack modify` interactively restructures layers.
+- `gh stack submit` pushes branches and creates or updates PRs and their GitHub stack. `gh stack rebase` cascades changes through dependent branches. `gh stack sync` fetches, rebases, pushes, and synchronizes PR state; it does not open new PRs. `gh stack push` only pushes branches. Existing signing, history-rewrite, and push requirements still apply.
+- `gh stack merge` merges stacked PRs from the bottom up. Merging a higher layer includes the unmerged layers below it.
+- The feature is in public preview. Check `gh stack --help`, the [GitHub stacked PR documentation](https://docs.github.com/en/pull-requests/how-tos/stacked-pull-requests), and the [gh-stack repository](https://github.com/github/gh-stack) for current behavior and command flags.
+
 # Git Worktrees
 
 - When creating a worktree, use the directory specified below for the current agent unless the user explicitly requests another location or has configured an override.
