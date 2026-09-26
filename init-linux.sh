@@ -6,28 +6,77 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 mkdir -p "$HOME/.local/bin"
 export PATH="$HOME/.local/bin:$PATH"
 
-if ! command -v tmux >/dev/null 2>&1; then
-    if command -v apt-get >/dev/null 2>&1; then
-        tmux_install=(apt-get install -y tmux)
-    elif command -v dnf >/dev/null 2>&1; then
-        tmux_install=(dnf install -y tmux)
-    elif command -v pacman >/dev/null 2>&1; then
-        tmux_install=(pacman -S --needed --noconfirm tmux)
-    elif command -v zypper >/dev/null 2>&1; then
-        tmux_install=(zypper --non-interactive install tmux)
-    elif command -v apk >/dev/null 2>&1; then
-        tmux_install=(apk add tmux)
+run_as_root() {
+    if [ "$EUID" -eq 0 ]; then
+        "$@"
     else
-        echo "Error: no supported package manager found; install tmux and rerun this script" >&2
+        sudo "$@"
+    fi
+}
+
+install_system_package() {
+    local command_name="$1"
+    local package_name="$command_name"
+
+    if command -v "$command_name" >/dev/null 2>&1; then
+        return
+    fi
+
+    if command -v apt-get >/dev/null 2>&1; then
+        if [ "$command_name" = "gh" ]; then
+            run_as_root apt-get update
+            run_as_root apt-get install -y ca-certificates curl
+            local keyring_download
+            keyring_download="$(mktemp)"
+            if ! curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg -o "$keyring_download"; then
+                rm -f "$keyring_download"
+                echo "Error: unable to download the GitHub CLI package signing key" >&2
+                exit 1
+            fi
+            run_as_root install -d -m 0755 /etc/apt/keyrings /etc/apt/sources.list.d
+            run_as_root install -m 0644 "$keyring_download" /etc/apt/keyrings/githubcli-archive-keyring.gpg
+            rm -f "$keyring_download"
+            printf 'deb [arch=%s signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n' "$(dpkg --print-architecture)" |
+                run_as_root tee /etc/apt/sources.list.d/github-cli.list >/dev/null
+        fi
+        run_as_root apt-get update
+        run_as_root apt-get install -y "$package_name"
+    elif command -v dnf >/dev/null 2>&1; then
+        run_as_root dnf install -y "$package_name"
+    elif command -v pacman >/dev/null 2>&1; then
+        if [ "$command_name" = "gh" ]; then
+            package_name="github-cli"
+        fi
+        run_as_root pacman -S --needed --noconfirm "$package_name"
+    elif command -v zypper >/dev/null 2>&1; then
+        run_as_root zypper --non-interactive install "$package_name"
+    elif command -v apk >/dev/null 2>&1; then
+        if [ "$command_name" = "gh" ]; then
+            package_name="github-cli"
+        fi
+        run_as_root apk add "$package_name"
+    else
+        echo "Error: no supported package manager found; install $command_name and rerun this script" >&2
         exit 1
     fi
 
-    if [ "$EUID" -eq 0 ]; then
-        "${tmux_install[@]}"
-    else
-        sudo "${tmux_install[@]}"
+    if ! command -v "$command_name" >/dev/null 2>&1; then
+        echo "Error: $command_name was installed but is not available" >&2
+        exit 1
+    fi
+}
+
+install_system_package git
+install_system_package gh
+
+if ! gh stack --help >/dev/null 2>&1; then
+    if ! gh extension install github/gh-stack; then
+        echo "Error: unable to install the gh stack extension" >&2
+        exit 1
     fi
 fi
+
+install_system_package tmux
 
 if ! command -v mise >/dev/null 2>&1; then
     curl -fsSL https://mise.run | sh

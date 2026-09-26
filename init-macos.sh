@@ -3,6 +3,21 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+if ! git --version >/dev/null 2>&1; then
+    brew install git
+fi
+
+if ! command -v gh >/dev/null 2>&1; then
+    brew install gh
+fi
+
+if ! gh stack --help >/dev/null 2>&1; then
+    if ! gh extension install github/gh-stack; then
+        echo "Error: unable to install the gh stack extension" >&2
+        exit 1
+    fi
+fi
+
 if ! command -v tmux >/dev/null 2>&1; then
     brew install tmux
 fi
