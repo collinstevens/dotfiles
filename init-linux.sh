@@ -83,6 +83,20 @@ if ! command -v mise >/dev/null 2>&1; then
 fi
 mise --version
 
+mise use --global --fuzzy dotnet@latest
+mise exec dotnet@latest -- dotnet tool install --global dotnet-counters --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-coverage --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-debug --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-dump --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-gcdump --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-monitor --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-trace --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-stack --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-symbol
+mise exec dotnet@latest -- dotnet tool install --global dotnet-debugger-extensions --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-sos --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-dsrouter --allow-roll-forward
+
 mise_path_line='export PATH="${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims:$HOME/.local/bin:$PATH"'
 bash_login_profile="$HOME/.profile"
 for profile in "$HOME/.bash_profile" "$HOME/.bash_login" "$HOME/.profile"; do
@@ -94,6 +108,13 @@ done
 for profile in "$HOME/.profile" "$bash_login_profile"; do
     if ! grep -Fqx "$mise_path_line" "$profile" 2>/dev/null; then
         printf '\n%s\n' "$mise_path_line" >> "$profile"
+    fi
+done
+
+dotnet_path_line='export PATH="$HOME/.dotnet/tools:$PATH"'
+for profile in "$HOME/.profile" "$bash_login_profile"; do
+    if ! grep -Fqx "$dotnet_path_line" "$profile" 2>/dev/null; then
+        printf '\n%s\n' "$dotnet_path_line" >> "$profile"
     fi
 done
 

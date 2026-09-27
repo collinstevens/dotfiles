@@ -89,16 +89,72 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
-Install-WingetPackage -Id "jdx.mise" -Command "mise" -Name "mise"
+Install-WingetPackage -Id "jdx.mise" -Command "mise.exe" -Name "mise"
 
 $miseDataDirectory = if ($env:MISE_DATA_DIR) { $env:MISE_DATA_DIR } else { Join-Path $env:LOCALAPPDATA "mise" }
 $miseShims = Join-Path $miseDataDirectory "shims"
+$dotnetTools = Join-Path $HOME ".dotnet\tools"
 $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
 $userPathEntries = @($userPath -split ";" | Where-Object {
-    $_ -and [Environment]::ExpandEnvironmentVariables($_).TrimEnd('\') -ine $miseShims.TrimEnd('\')
+    $_ -and [Environment]::ExpandEnvironmentVariables($_).TrimEnd('\') -ine $miseShims.TrimEnd('\') -and
+        [Environment]::ExpandEnvironmentVariables($_).TrimEnd('\') -ine $dotnetTools.TrimEnd('\')
 })
-[Environment]::SetEnvironmentVariable("Path", (@($miseShims) + $userPathEntries) -join ";", "User")
+[Environment]::SetEnvironmentVariable("Path", (@($miseShims, $dotnetTools) + $userPathEntries) -join ";", "User")
 Update-ProcessPath
+
+& mise.exe use --global --fuzzy dotnet@latest
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install the latest stable .NET SDK with mise"
+}
+
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-counters --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-counters"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-coverage --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-coverage"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-debug --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-debug"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-dump --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-dump"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-gcdump --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-gcdump"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-monitor --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-monitor"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-trace --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-trace"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-stack --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-stack"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-symbol
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-symbol"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-debugger-extensions --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-debugger-extensions"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-sos --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-sos"
+}
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-dsrouter --allow-roll-forward
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to install or update dotnet-dsrouter"
+}
 
 $hackInstalled = $false
 $hackFontRegistryName = "HackNerdFont-Regular (TrueType)"

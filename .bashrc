@@ -4,7 +4,7 @@ case $- in
       *) return;;
 esac
 
-export PATH="${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims:$HOME/.local/bin:$PATH"
+export PATH="${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims:$HOME/.local/bin:$HOME/.dotnet/tools:$PATH"
 
 if [[ "$PWD" == "$HOME" && -d "$HOME/projects" ]]; then
     cd "$HOME/projects"

@@ -39,6 +39,10 @@
 - Treat a sandboxed `gh auth status` failure as inconclusive. Before reporting expired authentication or asking the user to log in, rerun it with escalated sandbox permissions.
 - Only ask the user to run `gh auth login` when `gh auth status` also fails outside the sandbox.
 
+# mise
+
+- On Windows, use `mise.exe`, not `mise`.
+
 # Code Comments
 
 - Never write code comments. If code seems to need a comment, rewrite the code to be self-explanatory instead.
