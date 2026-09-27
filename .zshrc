@@ -1,4 +1,4 @@
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.dotnet/tools:$PATH"
 
 if [[ "$PWD" == "$HOME" && -d "$HOME/projects" ]]; then
     cd "$HOME/projects"

@@ -27,6 +27,20 @@ if ! command -v mise >/dev/null 2>&1; then
 fi
 mise --version
 
+mise use --global --fuzzy dotnet@latest
+mise exec dotnet@latest -- dotnet tool install --global dotnet-counters --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-coverage --allow-roll-forward
+echo "Skipped: dotnet-debug is not supported on macOS"
+mise exec dotnet@latest -- dotnet tool install --global dotnet-dump --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-gcdump --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-monitor --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-trace --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-stack --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-symbol
+mise exec dotnet@latest -- dotnet tool install --global dotnet-debugger-extensions --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-sos --allow-roll-forward
+mise exec dotnet@latest -- dotnet tool install --global dotnet-dsrouter --allow-roll-forward
+
 if ! command -v yq >/dev/null 2>&1; then
     brew install yq
 fi

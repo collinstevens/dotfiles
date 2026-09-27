@@ -29,12 +29,17 @@ The shared config sets `core.safecrlf=warn` to warn about irreversible line-endi
 `.gitattributes` uses `* text=auto eol=lf` to normalize detected text files to LF in Git and check them out with LF on every platform. `*.bat` and `*.cmd` are normalized to LF in Git but checked out with CRLF. The iTerm2 preferences plist is marked `-text` to prevent conversion. These attributes control this repository's line endings independently of `core.autocrlf`.
 
 ### What each installer manages
-- All installers: Git, GitHub CLI, the `github/gh-stack` CLI extension, `yq`, and `mise` installation as needed, shared Git config and global ignores, shared agent instructions, platform-specific Claude settings/status line, Claude keybindings, Codex rules and merged configuration, Grok and OpenCode configuration, and SSH public key authorization.
+- All installers: Git, GitHub CLI, the `github/gh-stack` CLI extension, `yq`, and `mise` installation as needed, the latest stable .NET SDK through mise, .NET diagnostic tools, shared Git config and global ignores, shared agent instructions, platform-specific Claude settings/status line, Claude keybindings, Codex rules and merged configuration, Grok and OpenCode configuration, and SSH public key authorization.
 - `init-windows.ps1`: Windows Git config, WSL config, Hack Nerd Font installation, mise shims in the user PATH, the all-users PowerShell profile and performance helper, Windows Terminal settings, and `/etc/wsl.conf` inside the default WSL distribution when available.
 - `init-linux.sh`: bash, tmux installation and configuration, mise shims and `$HOME/.local/bin` in login profile PATH setup, `/etc/wsl.conf`, and Ptyxis settings when `dconf` is available.
 - `init-macos.sh`: zsh configuration and login profile, macOS Git config, tmux installation and configuration, LinearMouse, the keyboard LaunchAgent, and iTerm2 preferences.
 
 The repo root `AGENTS.md` provides project guidance and is **not** installed. Maintain shared cross-project instructions in `shared/AGENTS.md`; all platform installers copy it to `$HOME/.codex/AGENTS.md`, `$HOME/.grok/AGENTS.md`, and `$HOME/.claude/CLAUDE.md`.
+
+### .NET installation
+Each platform installer explicitly configures `dotnet@latest` globally in mise and installs the diagnostic tools inline. The SDK includes the .NET and ASP.NET Core runtimes. Rerunning an installer checks for newer stable SDK and tool releases, whether LTS or STS.
+
+Tools are installed with `dotnet tool install --global`; this also updates existing tools. Most tools use `--allow-roll-forward`. `dotnet-symbol` already enables major-version roll-forward with a legacy setting that conflicts with that flag. Shell PATH setup includes `$HOME/.dotnet/tools`, and mise activation supplies `DOTNET_ROOT`. macOS skips the unsupported `dotnet-debug` tool. Debugger registration through `dotnet-sos install` or `dotnet-debugger-extensions install` remains a separate step; these commands overwrite the same extension installation.
 
 ### SSH public key naming
 Name public keys in `ssh-keys/` using `user-hostname-keytype.pub`.
