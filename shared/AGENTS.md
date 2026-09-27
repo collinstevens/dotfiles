@@ -43,6 +43,23 @@
 
 - On Windows, use `mise.exe`, not `mise`.
 
+# .NET Guidance
+
+Use the [.NET diagnostic tools](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/tools-overview) to investigate application behavior:
+
+- [dotnet-counters](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-counters): Monitor runtime metrics such as CPU usage and exception rates for an initial performance check.
+- [dotnet-coverage](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage): Collect code coverage from .NET processes and merge coverage reports to identify unexercised code.
+- [dotnet-debug](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-debug): Interactively inspect live CoreCLR processes and memory dumps with SOS commands. Currently unsupported on macOS.
+- [dotnet-dump](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-dump): Collect process dumps and analyze managed state offline without a native debugger.
+- [dotnet-gcdump](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-gcdump): Capture the managed heap of a running process to investigate object counts, sizes, and references. Collection triggers a full GC.
+- [dotnet-monitor](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-monitor): Expose diagnostic collection over HTTP and collect dumps, traces, logs, and metrics on demand or through automated rules.
+- [dotnet-trace](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-trace): Capture runtime events and profiling traces to investigate slow execution and performance bottlenecks.
+- [dotnet-stack](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-stack): Print managed thread stacks from a running process for a quick view of what threads are doing.
+- [dotnet-symbol](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-symbol): Download symbols and runtime debugging files needed to analyze dumps, including dumps from another machine.
+- [dotnet-debugger-extensions](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-debugger-extensions): Install .NET extensions for LLDB or WinDbg/cdb to inspect runtime state. Includes SOS functionality and additional commands.
+- [dotnet-sos](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-sos): Install the SOS extension for inspecting managed state in native debuggers. Prefer dotnet-debugger-extensions for new setups; their extension installations overwrite each other.
+- [dotnet-dsrouter](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-dsrouter): Connect local diagnostic tools to .NET apps on Android, iOS, and tvOS devices or simulators. Intended for development and testing.
+
 # Code Comments
 
 - Never write code comments. If code seems to need a comment, rewrite the code to be self-explanatory instead.
