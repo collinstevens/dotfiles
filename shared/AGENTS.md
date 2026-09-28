@@ -62,7 +62,7 @@ Use the [.NET diagnostic tools](https://learn.microsoft.com/en-us/dotnet/core/di
 
 # Code Comments
 
-- Never write code comments. If code seems to need a comment, rewrite the code to be self-explanatory instead.
+- Never write new code comments. If code seems to need a comment, rewrite the code to be self-explanatory instead.
 - When modifying code, delete any existing comments the change invalidates.
 - Leave existing comments alone when the code they relate to isn't being modified.
 
