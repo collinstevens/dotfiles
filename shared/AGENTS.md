@@ -5,6 +5,10 @@
 - When squashing, rebasing, amending, or otherwise rewriting the user's commits, sign the resulting commits again. This includes root commits. Ensure the chosen tool enables signing; Git plumbing commands such as `git commit-tree` require explicit `-S` and do not honor `commit.gpgsign`.
 - Keep a local recovery reference before rewriting published history. When pushing rewritten history is authorized, use `--force-with-lease=<ref>:<expected-remote-commit>` with an explicit expected remote commit.
 - Use conventional commits https://www.conventionalcommits.org/en/v1.0.0
+
+# Pull Request Guidelines
+
+- Before writing a PR title or description, check the repository for its own PR guidance, such as `CONTRIBUTING.md` or a GitHub pull request template (`PULL_REQUEST_TEMPLATE.md` or a `PULL_REQUEST_TEMPLATE/` directory in the repo root, `.github/`, or `docs/`). If the repository has its own guidance, follow it instead of the defaults below.
 - For PR titles, the title should be a single conventional commit message assuming the commits on the branch will be squash committed
 - For PR descriptions, focus on "Motivation" the most, then on "How did it change" in broad strokes.
   - The diff shows the details.
