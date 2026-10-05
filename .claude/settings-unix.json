@@ -7,8 +7,8 @@
     "defaultMode": "auto"
   },
   "autoMemoryEnabled": false,
-  "model": "fable",
-  "effortLevel": "high",
+  "model": "claude-opus-5-5",
+  "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
   "tui": "default",
   "theme": "dark-ansi",
