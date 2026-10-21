@@ -101,6 +101,7 @@ $userPathEntries = @($userPath -split ";" | Where-Object {
 })
 [Environment]::SetEnvironmentVariable("Path", (@($miseShims, $dotnetTools) + $userPathEntries) -join ";", "User")
 Update-ProcessPath
+$env:Path = (Join-Path $miseDataDirectory "dotnet-root") + ";" + $env:Path
 
 & mise.exe use --global --fuzzy dotnet@latest
 if ($LASTEXITCODE -ne 0) {
