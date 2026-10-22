@@ -7,6 +7,9 @@
     "defaultMode": "auto"
   },
   "autoMemoryEnabled": false,
+  "enabledPlugins": {
+    "cc-plugin-you-should-know@builtin": true
+  },
   "model": "opus",
   "effortLevel": "medium",
   "modelSettings": {
