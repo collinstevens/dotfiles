@@ -66,6 +66,14 @@ function cdtemp {
     Set-Location -Path (mktemp $Prefix)
 }
 
+function cy {
+    claude --dangerously-skip-permissions @args
+}
+
+function cys {
+    claude --dangerously-skip-permissions --setting-sources=user @args
+}
+
 function reloadenv {
     $machineEnvironment = [Environment]::GetEnvironmentVariables("Machine")
     $userEnvironment = [Environment]::GetEnvironmentVariables("User")

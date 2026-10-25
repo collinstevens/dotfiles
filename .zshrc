@@ -28,6 +28,9 @@ cddir() {
     mkdir -p -- "$1" && builtin cd -- "$1"
 }
 
+alias cy='claude --dangerously-skip-permissions'
+alias cys='claude --dangerously-skip-permissions --setting-sources=user'
+
 autoload -Uz compinit && compinit
 
 bindkey "^[[3~" delete-char
