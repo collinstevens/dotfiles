@@ -2,6 +2,10 @@
 
 Personal cross-platform dotfiles for Windows (native + Windows Terminal), Linux (WSL2 + GNOME), and macOS (iTerm2 + zsh). There is no build, test, or lint step — the "product" is the set of config files plus platform installers that copy them into place.
 
+## Machine-specific guidance
+
+If `AGENTS.local.md` exists in the repo root, read it and follow it as machine-specific project guidance. It is excluded from Git through `.git/info/exclude` and is never committed.
+
 ## Git Workflow
 
 Commit and push changes directly to `master` for this dotfiles repository. Do not create a branch or pull request unless explicitly asked.
