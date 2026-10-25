@@ -83,19 +83,19 @@ if ! command -v mise >/dev/null 2>&1; then
 fi
 mise --version
 
-mise use --global --fuzzy dotnet@latest
-mise exec dotnet@latest -- dotnet tool install --global dotnet-counters --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-coverage --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-debug --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-dump --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-gcdump --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-monitor --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-trace --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-stack --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-symbol
-mise exec dotnet@latest -- dotnet tool install --global dotnet-debugger-extensions --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-sos --allow-roll-forward
-mise exec dotnet@latest -- dotnet tool install --global dotnet-dsrouter --allow-roll-forward
+mise use --global dotnet@10.0.402
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-counters --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-coverage --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-debug --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-dump --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-gcdump --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-monitor --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-trace --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-stack --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-symbol
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-debugger-extensions --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-sos --allow-roll-forward
+mise exec dotnet@10.0.402 -- dotnet tool install --global dotnet-dsrouter --allow-roll-forward
 
 mise_path_line='export PATH="${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}/shims:$HOME/.local/bin:$PATH"'
 bash_login_profile="$HOME/.profile"
