@@ -30,6 +30,8 @@ green="${esc}[38;2;171;223;167m"
 
 segments=()
 
+[ -n "$project_name" ] && segments+=("${green}${project_name}${reset}")
+
 if [ -n "$model" ]; then
 	segment="$model $effort"
 	[ -n "$fast" ] && segment="$segment fast"
@@ -53,8 +55,6 @@ if [ -n "$work_dir" ]; then
 	branch=$(git -C "$work_dir" branch --show-current 2>/dev/null)
 	[ -n "$branch" ] && segments+=("${blue}${branch}${reset}")
 fi
-
-[ -n "$project_name" ] && segments+=("${green}${project_name}${reset}")
 
 separator="${dim} · ${reset}"
 output=""

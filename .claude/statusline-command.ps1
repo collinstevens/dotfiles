@@ -22,6 +22,15 @@ $mauve = "$escape[38;2;200;169;238m"
 $green = "$escape[38;2;171;223;167m"
 $segments = @()
 
+$workspace = Get-Prop $data 'workspace'
+$repository = Get-Prop $workspace 'repo'
+$projectName = Get-Prop $repository 'name'
+if ([string]::IsNullOrEmpty($projectName)) {
+    $projectDirectory = Get-Prop $workspace 'project_dir'
+    if ($projectDirectory) { $projectName = Split-Path $projectDirectory -Leaf }
+}
+if ($projectName) { $segments += "$green$projectName$reset" }
+
 $model = Get-Prop $data.model 'display_name'
 if ([string]::IsNullOrEmpty($model)) { $model = Get-Prop $data.model 'id' }
 if ($model) {
@@ -63,21 +72,12 @@ if ($pullRequestNumber) {
     $segments += $pullRequestText
 }
 
-$workspace = Get-Prop $data 'workspace'
 $workDirectory = Get-Prop $workspace 'current_dir'
 if ([string]::IsNullOrEmpty($workDirectory)) { $workDirectory = Get-Prop $data 'cwd' }
 if ($workDirectory) {
     $branch = git -C $workDirectory branch --show-current 2>$null
     if ($branch) { $segments += "$blue$branch$reset" }
 }
-
-$repository = Get-Prop $workspace 'repo'
-$projectName = Get-Prop $repository 'name'
-if ([string]::IsNullOrEmpty($projectName)) {
-    $projectDirectory = Get-Prop $workspace 'project_dir'
-    if ($projectDirectory) { $projectName = Split-Path $projectDirectory -Leaf }
-}
-if ($projectName) { $segments += "$green$projectName$reset" }
 
 $separator = $dim + ' ' + [char]0x00B7 + ' ' + $reset
 Write-Host -NoNewline ($segments -join $separator)
