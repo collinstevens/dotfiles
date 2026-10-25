@@ -16,7 +16,7 @@ Write-PwshPerformance -Event startup -Stage mise -DurationMs $pwshStageTimer.Ela
 $pwshStageTimer.Restart()
 
 $gitInstallDirectory = Split-Path (Split-Path (Get-Command git.exe -CommandType Application | Select-Object -First 1).Source -Parent) -Parent
-Set-Alias -Name gbash -Value (Join-Path $gitInstallDirectory "bin\bash.exe")
+Set-Alias -Scope Global -Name gbash -Value (Join-Path $gitInstallDirectory "bin\bash.exe")
 Write-PwshPerformance -Event startup -Stage git-alias -DurationMs $pwshStageTimer.Elapsed.TotalMilliseconds
 
 if ($global:PwshPerformance.Enabled -and (Test-Path Function:\_mise_hook)) {
@@ -44,12 +44,12 @@ $null = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -MaxTriggerCoun
     }
 }
 
-function mktemp {
+function global:mktemp {
     param([string]$Prefix)
     [System.IO.Directory]::CreateTempSubdirectory($Prefix).FullName
 }
 
-function cddir {
+function global:cddir {
     param(
         [Parameter(Mandatory, Position = 0)]
         [ValidateNotNullOrEmpty()]
@@ -61,20 +61,20 @@ function cddir {
     Set-Location -LiteralPath $directory.FullName
 }
 
-function cdtemp {
+function global:cdtemp {
     param([string]$Prefix)
     Set-Location -Path (mktemp $Prefix)
 }
 
-function cy {
+function global:cy {
     claude --dangerously-skip-permissions @args
 }
 
-function cys {
+function global:cys {
     claude --dangerously-skip-permissions --setting-sources=user @args
 }
 
-function reloadenv {
+function global:reloadenv {
     $machineEnvironment = [Environment]::GetEnvironmentVariables("Machine")
     $userEnvironment = [Environment]::GetEnvironmentVariables("User")
 
@@ -91,6 +91,8 @@ function reloadenv {
     $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
     $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
     $env:Path = (@($machinePath, $userPath) | Where-Object { $_ }) -join ";"
+
+    . $PROFILE.AllUsersAllHosts
 
     if (Test-Path Function:\_mise_hook) {
         _mise_hook
