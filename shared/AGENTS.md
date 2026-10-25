@@ -77,3 +77,28 @@ Use the [.NET diagnostic tools](https://learn.microsoft.com/en-us/dotnet/core/di
 - Applies to everything written: replies, commit messages, PR descriptions, review comments, docs.
 - Never tack a commentary clause onto a sentence. No `, and that ...`, `, and this ...`, or `, which ...` where the pronoun stands for the whole preceding clause. End the sentence, then state the consequence as its own sentence with a concrete subject.
 - Never use dramatic temporal hinges: `the moment X`, `as sonn as X`, `the day X`, `the second X`. Write `if X` or `when X`.
+
+# GitHub References
+- Never write a bare `#1416` outside GitHub. It hides whether the number is an issue or a PR, and which repository it belongs to.
+- Outside GitHub, name every issue, PR, and Actions reference by its URL path after `github.com/<owner>/`, so the repository and kind are always visible. Repeat the full form on every mention, including references to the current repository.
+  ```
+  octo-repo/pull/1416
+  octo-repo/issues/905
+  octo-repo/actions/runs/18234567890
+  octo-repo/actions/runs/18234567890/job/51987654321
+  octo-repo/actions/workflows/ci.yaml
+  ```
+- Prefix the owner, as in `other-org/other-repo/pull/12`, when the repository belongs to a different owner than the current repository.
+- In terminal replies, write the path form as plain text.
+- In any medium that supports links, such as email, chat, and documents, hyperlink every reference to its full URL. Use the path form as the link text unless that medium's own rules say otherwise:
+  ```markdown
+  [octo-repo/pull/1416](https://github.com/octo-org/octo-repo/pull/1416)
+  ```
+- On GitHub, such as in PR descriptions, issue bodies, comments, and commit messages, use GitHub's native reference syntax so GitHub renders its own rich preview with the kind, title, and state. Never wrap these in Markdown links or use the path form there.
+  ```markdown
+  #1416                         same repository
+  octo-org/octo-repo#1416       another repository
+  fixes #905                    closing keyword
+  https://github.com/octo-org/octo-repo/actions/runs/18234567890
+  ```
+  Actions runs, jobs, and workflows have no shorthand. Paste the bare full URL.
