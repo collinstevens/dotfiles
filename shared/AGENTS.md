@@ -89,17 +89,15 @@ Use the [.NET diagnostic tools](https://learn.microsoft.com/en-us/dotnet/core/di
 
 # GitHub References
 - Never write a bare `#1416` outside GitHub. It hides whether the number is an issue or a PR, and which repository it belongs to.
-- Outside GitHub, name every issue, PR, and Actions reference by its URL path after `github.com/<owner>/`, so the repository and kind are always visible. Repeat the full form on every mention, including references to the current repository.
+- In terminal replies, write every issue, PR, and Actions reference as its bare full URL so I can click it. Never write the shorthand `octo-repo#1416` or the path form `octo-repo/pull/1416` there. Repeat the full URL on every mention, including references to the current repository.
   ```
-  octo-repo/pull/1416
-  octo-repo/issues/905
-  octo-repo/actions/runs/18234567890
-  octo-repo/actions/runs/18234567890/job/51987654321
-  octo-repo/actions/workflows/ci.yaml
+  https://github.com/octo-org/octo-repo/pull/1416
+  https://github.com/octo-org/octo-repo/issues/905
+  https://github.com/octo-org/octo-repo/actions/runs/18234567890
+  https://github.com/octo-org/octo-repo/actions/runs/18234567890/job/51987654321
+  https://github.com/octo-org/octo-repo/actions/workflows/ci.yaml
   ```
-- Prefix the owner, as in `other-org/other-repo/pull/12`, when the repository belongs to a different owner than the current repository.
-- In terminal replies, write the path form as plain text.
-- In any medium that supports links, such as email, chat, and documents, hyperlink every reference to its full URL. Use the path form as the link text unless that medium's own rules say otherwise:
+- In any medium that supports links, such as email, chat, and documents, hyperlink every reference to its full URL. Unless that medium's own rules say otherwise, use the URL path after `github.com/<owner>/` as the link text, and prefix the owner, as in `other-org/other-repo/pull/12`, when the repository belongs to a different owner than the current repository:
   ```markdown
   [octo-repo/pull/1416](https://github.com/octo-org/octo-repo/pull/1416)
   ```
