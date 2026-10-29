@@ -297,6 +297,7 @@ $noAgentSummaryPreload = (Join-Path $HOME ".claude\no-agent-summary.js").Replace
 [Environment]::SetEnvironmentVariable("BUN_OPTIONS", "--preload $noAgentSummaryPreload", "User")
 
 & (Join-Path $PSScriptRoot ".codex\configure.ps1")
+& (Join-Path $PSScriptRoot ".claude\configure-mcp.ps1")
 & (Join-Path $PSScriptRoot "ssh-keys\authorize.ps1")
 
 Copy-WslSystemFile -Source "wsl.conf" -Target "/etc/wsl.conf"

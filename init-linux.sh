@@ -205,6 +205,7 @@ for link in "${system_files[@]}"; do
 done
 
 mise exec yq@latest -- bash "$SCRIPT_DIR/.codex/configure.sh"
+bash "$SCRIPT_DIR/.claude/configure-mcp.sh"
 bash "$SCRIPT_DIR/ssh-keys/authorize.sh"
 
 ptyxis_conf="${SCRIPT_DIR}/ptyxis.conf"
