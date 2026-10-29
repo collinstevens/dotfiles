@@ -208,6 +208,7 @@ $links = @(
     @{ Source = ".wslconfig"; Target = "$HOME\.wslconfig" },
     @{ Source = ".claude\settings-windows.json"; Target = "$HOME\.claude\settings.json" },
     @{ Source = ".claude\statusline-command.ps1"; Target = "$HOME\.claude\statusline-command.ps1" },
+    @{ Source = ".claude\no-agent-summary.js"; Target = "$HOME\.claude\no-agent-summary.js" },
     @{ Source = "shared\AGENTS.md"; Target = "$HOME\.claude\CLAUDE.md" },
     @{ Source = "shared\skills\narrative-rewrite\SKILL.md"; Target = "$HOME\.claude\skills\narrative-rewrite\SKILL.md" },
     @{ Source = "shared\skills\git-cleanup\SKILL.md"; Target = "$HOME\.claude\skills\git-cleanup\SKILL.md" },
@@ -254,6 +255,9 @@ foreach ($link in $links) {
     Copy-Item -Path $sourceFile -Destination $target
     Write-Host "Copied: $sourceFile -> $target"
 }
+
+$noAgentSummaryPreload = (Join-Path $HOME ".claude\no-agent-summary.js").Replace('\', '/')
+[Environment]::SetEnvironmentVariable("BUN_OPTIONS", "--preload $noAgentSummaryPreload", "User")
 
 & (Join-Path $PSScriptRoot ".codex\configure.ps1")
 & (Join-Path $PSScriptRoot "ssh-keys\authorize.ps1")

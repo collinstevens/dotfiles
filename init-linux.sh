@@ -147,6 +147,7 @@ links=(
     ".gitignore-global:$HOME/.gitignore-global"
     ".claude/settings-unix.json:$HOME/.claude/settings.json"
     ".claude/statusline-command.sh:$HOME/.claude/statusline-command.sh"
+    ".claude/no-agent-summary.js:$HOME/.claude/no-agent-summary.js"
     "shared/AGENTS.md:$HOME/.claude/CLAUDE.md"
     "shared/skills/narrative-rewrite/SKILL.md:$HOME/.claude/skills/narrative-rewrite/SKILL.md"
     "shared/skills/git-cleanup/SKILL.md:$HOME/.claude/skills/git-cleanup/SKILL.md"

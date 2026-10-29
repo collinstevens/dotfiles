@@ -155,6 +155,7 @@ export PATH="$HOME/.opencode/bin:$PATH"
 export PATH="$HOME/.amp/bin:$PATH"
 
 export CLAUDE_CONFIG_DIR="$HOME/.claude"
+export BUN_OPTIONS="--preload $HOME/.claude/no-agent-summary.js"
 
 # Allow `code .` from WSL without importing the entire Windows PATH
 export PATH="$PATH:/mnt/c/Program Files/Microsoft VS Code/bin"

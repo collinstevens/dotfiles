@@ -58,6 +58,7 @@ links=(
     "shared/skills/git-cleanup/SKILL.md:$HOME/.claude/skills/git-cleanup/SKILL.md"
     ".claude/settings-unix.json:$HOME/.claude/settings.json"
     ".claude/statusline-command.sh:$HOME/.claude/statusline-command.sh"
+    ".claude/no-agent-summary.js:$HOME/.claude/no-agent-summary.js"
     ".claude/keybindings.json:$HOME/.claude/keybindings.json"
     "shared/AGENTS.md:$HOME/.codex/AGENTS.md"
     "shared/skills/narrative-rewrite/SKILL.md:$HOME/.codex/skills/narrative-rewrite/SKILL.md"
