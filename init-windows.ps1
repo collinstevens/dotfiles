@@ -125,7 +125,6 @@ $miseTools = @(
     "pnpm",
     "python",
     "rg",
-    "rust",
     "yq"
 )
 

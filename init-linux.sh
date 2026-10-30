@@ -97,7 +97,6 @@ mise_tools=(
     pnpm
     python
     rg
-    rust
     yq
 )
 
