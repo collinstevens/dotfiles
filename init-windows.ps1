@@ -89,7 +89,15 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
-Install-WingetPackage -Id "jdx.mise" -Command "mise.exe" -Name "mise"
+
+if (-not (Get-Command mise.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+    Invoke-RestMethod https://mise.run/powershell | Invoke-Expression
+    Update-ProcessPath
+    if (-not (Get-Command mise.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+        Write-Error "Error: mise was installed but mise.exe is not available"
+        exit 1
+    }
+}
 
 $miseDataDirectory = if ($env:MISE_DATA_DIR) { $env:MISE_DATA_DIR } else { Join-Path $env:LOCALAPPDATA "mise" }
 $miseShims = Join-Path $miseDataDirectory "shims"

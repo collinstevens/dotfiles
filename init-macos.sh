@@ -3,6 +3,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+mkdir -p "$HOME/.local/bin"
+export PATH="$HOME/.local/bin:$PATH"
+
 if ! git --version >/dev/null 2>&1; then
     brew install git
 fi
@@ -23,7 +26,7 @@ if ! command -v tmux >/dev/null 2>&1; then
 fi
 
 if ! command -v mise >/dev/null 2>&1; then
-    brew install mise
+    curl -fsSL https://mise.run | sh
 fi
 mise --version
 

@@ -1,7 +1,6 @@
 brew "gh"
 brew "git"
 brew "jq"
-brew "mise"
 brew "yq"
 cask "iterm2"
 cask "linearmouse"
