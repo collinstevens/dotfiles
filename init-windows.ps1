@@ -133,6 +133,11 @@ foreach ($miseTool in $miseTools) {
     }
 }
 
+& mise.exe settings set self_update.auto true
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to enable mise self-update"
+}
+
 & mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-counters --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-counters"
