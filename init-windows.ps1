@@ -103,56 +103,80 @@ $userPathEntries = @($userPath -split ";" | Where-Object {
 Update-ProcessPath
 $env:Path = (Join-Path $miseDataDirectory "dotnet-root") + ";" + $env:Path
 
-& mise.exe use --global dotnet@10.0.402
+$miseTools = @(
+    "aspire",
+    "aube",
+    "bun",
+    "dotnet",
+    "git-lfs",
+    "java",
+    "jq",
+    "node",
+    "npm",
+    "pnpm",
+    "python",
+    "rg",
+    "rust",
+    "yq"
+)
+
+& mise.exe use --global ($miseTools | ForEach-Object { "$_@latest" })
 if ($LASTEXITCODE -ne 0) {
-    throw "Unable to install the .NET SDK with mise"
+    throw "Unable to install global tools with mise"
 }
 
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-counters --allow-roll-forward
+foreach ($miseTool in $miseTools) {
+    & mise.exe config set --global "tools.$miseTool.auto_update" true
+    if ($LASTEXITCODE -ne 0) {
+        throw "Unable to enable auto_update for $miseTool"
+    }
+}
+
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-counters --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-counters"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-coverage --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-coverage --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-coverage"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-debug --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-debug --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-debug"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-dump --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-dump --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-dump"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-gcdump --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-gcdump --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-gcdump"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-monitor --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-monitor --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-monitor"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-trace --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-trace --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-trace"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-stack --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-stack --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-stack"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-symbol
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-symbol
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-symbol"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-debugger-extensions --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-debugger-extensions --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-debugger-extensions"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-sos --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-sos --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-sos"
 }
-& mise.exe exec dotnet@10.0.402 -- dotnet tool install --global dotnet-dsrouter --allow-roll-forward
+& mise.exe exec dotnet@latest -- dotnet tool install --global dotnet-dsrouter --allow-roll-forward
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to install or update dotnet-dsrouter"
 }
