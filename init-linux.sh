@@ -93,6 +93,7 @@ mise_tools=(
     jq
     node
     npm
+    npm:wrangler
     pnpm
     python
     rg
@@ -138,28 +139,6 @@ for profile in "$HOME/.profile" "$bash_login_profile"; do
         printf '\n%s\n' "$dotnet_path_line" >> "$profile"
     fi
 done
-
-if ! command -v yq >/dev/null 2>&1; then
-    case "$(uname -m)" in
-        x86_64) yq_arch="amd64" ;;
-        aarch64|arm64) yq_arch="arm64" ;;
-        armv7l) yq_arch="arm" ;;
-        i386|i686) yq_arch="386" ;;
-        *)
-            echo "Error: unsupported architecture for yq: $(uname -m)" >&2
-            exit 1
-            ;;
-    esac
-
-    yq_download="$(mktemp)"
-    if ! curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${yq_arch}" -o "$yq_download"; then
-        rm -f "$yq_download"
-        echo "Error: unable to download yq" >&2
-        exit 1
-    fi
-    install -m 0755 "$yq_download" "$HOME/.local/bin/yq"
-    rm -f "$yq_download"
-fi
 
 links=(
     ".bashrc:$HOME/.bashrc"
@@ -225,7 +204,7 @@ for link in "${system_files[@]}"; do
     echo "Copied: $source_file -> $target"
 done
 
-bash "$SCRIPT_DIR/.codex/configure.sh"
+mise exec yq@latest -- bash "$SCRIPT_DIR/.codex/configure.sh"
 bash "$SCRIPT_DIR/ssh-keys/authorize.sh"
 
 ptyxis_conf="${SCRIPT_DIR}/ptyxis.conf"

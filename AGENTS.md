@@ -18,7 +18,7 @@ Commit and push changes directly to `master` for this dotfiles repository. Do no
 
 The scripts **copy** (not symlink) files listed in `links` to their targets, removing existing targets first. System files, LaunchAgents, imported preferences, and merged configuration have separate installation steps. After editing a dotfile here, re-run the relevant installer to propagate the change. Add ordinary copied dotfiles to the applicable installer's `links` collection; Linux system files belong in `system_files`, and other resources need their corresponding installation step.
 
-All installers install native `yq` if needed and invoke `.codex/configure.ps1` or `.codex/configure.sh` to merge `.codex/managed-config.toml` and `.codex/permissions.toml` into `$HOME/.codex/config.toml`. The merge preserves unrelated machine-specific settings, replaces managed values, removes the legacy `sandbox_workspace_write` table, and rebuilds `permissions.workspace_gitignore` with the target machine's Git ignore path. The full machine-specific config is not stored in this repository.
+The Windows and macOS installers install native `yq` if needed. The Linux installer uses the mise `yq` through `mise exec yq@latest`. All installers invoke `.codex/configure.ps1` or `.codex/configure.sh` to merge `.codex/managed-config.toml` and `.codex/permissions.toml` into `$HOME/.codex/config.toml`. The merge preserves unrelated machine-specific settings, replaces managed values, removes the legacy `sandbox_workspace_write` table, and rebuilds `permissions.workspace_gitignore` with the target machine's Git ignore path. The full machine-specific config is not stored in this repository.
 
 ## Architecture
 

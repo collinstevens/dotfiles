@@ -113,6 +113,7 @@ $miseTools = @(
     "jq",
     "node",
     "npm",
+    "npm:wrangler",
     "pnpm",
     "python",
     "rg",

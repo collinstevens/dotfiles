@@ -37,6 +37,7 @@ mise_tools=(
     jq
     node
     npm
+    npm:wrangler
     pnpm
     python
     rg
