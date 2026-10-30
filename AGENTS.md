@@ -34,7 +34,7 @@ The shared config sets `core.safecrlf=warn` to warn about irreversible line-endi
 
 ### What each installer manages
 - All installers: Git, GitHub CLI, the `github/gh-stack` CLI extension, `yq`, and `mise` installation as needed, global mise tools, .NET diagnostic tools, shared Git config and global ignores, shared agent instructions, platform-specific Claude settings/status line, Claude keybindings, the Claude agent-summary preload, the user-scope Excalidraw+ MCP server for Claude (`.claude/configure-mcp.ps1` or `.claude/configure-mcp.sh`, authenticated with the `EXCALIDRAW_API_KEY` environment variable and skipped when `claude` is not installed or the variable is unset), Codex rules and merged configuration, Grok and OpenCode configuration, and SSH public key authorization.
-- `init-windows.ps1`: Windows Git config, WSL config, Hack Nerd Font installation, mise shims in the user PATH, the all-users PowerShell profile and performance helper, Windows Terminal settings, and `/etc/wsl.conf` inside the default WSL distribution when available.
+- `init-windows.ps1`: PowerToys, Windows Git config, WSL config, Hack Nerd Font installation, mise shims in the user PATH, the all-users PowerShell profile and performance helper, Windows Terminal settings, and `/etc/wsl.conf` inside the default WSL distribution when available.
 - `init-linux.sh`: bash, tmux installation and configuration, mise shims and `$HOME/.local/bin` in login profile PATH setup, `/etc/wsl.conf`, and Ptyxis settings when `dconf` is available.
 - `init-macos.sh`: zsh configuration and login profile, macOS Git config, tmux installation and configuration, LinearMouse, the keyboard LaunchAgent, and iTerm2 preferences.
 

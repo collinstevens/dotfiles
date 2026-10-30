@@ -13,13 +13,20 @@ function Install-WingetPackage {
         [string]$Name
     )
 
-    if (Get-Command $Command -CommandType Application -ErrorAction SilentlyContinue) {
+    if ($Command -and (Get-Command $Command -CommandType Application -ErrorAction SilentlyContinue)) {
         return
     }
 
     if (-not (Get-Command winget.exe -CommandType Application -ErrorAction SilentlyContinue)) {
         Write-Error "Error: winget.exe is required to install $Name"
         exit 1
+    }
+
+    if (-not $Command) {
+        & winget.exe list --id $Id --exact --source winget --accept-source-agreements *> $null
+        if ($LASTEXITCODE -eq 0) {
+            return
+        }
     }
 
     & winget.exe install --id $Id --exact --source winget --accept-package-agreements --accept-source-agreements
@@ -29,7 +36,7 @@ function Install-WingetPackage {
     }
 
     Update-ProcessPath
-    if (-not (Get-Command $Command -CommandType Application -ErrorAction SilentlyContinue)) {
+    if ($Command -and -not (Get-Command $Command -CommandType Application -ErrorAction SilentlyContinue)) {
         Write-Error "Error: $Name was installed but $Command is not available"
         exit 1
     }
@@ -89,6 +96,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
+Install-WingetPackage -Id "Microsoft.PowerToys" -Name "PowerToys"
 
 if (-not (Get-Command mise.exe -CommandType Application -ErrorAction SilentlyContinue)) {
     Invoke-RestMethod https://mise.run/powershell | Invoke-Expression
