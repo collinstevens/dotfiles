@@ -78,6 +78,14 @@ Use the [.NET diagnostic tools](https://learn.microsoft.com/en-us/dotnet/core/di
 - Never tack a commentary clause onto a sentence. No `, and that ...`, `, and this ...`, or `, which ...` where the pronoun stands for the whole preceding clause. End the sentence, then state the consequence as its own sentence with a concrete subject.
 - Never use dramatic temporal hinges: `the moment X`, `as sonn as X`, `the day X`, `the second X`. Write `if X` or `when X`.
 - Always use the Oxford comma. Write `milk, eggs, and cheese`, not `milk, eggs and cheese`.
+- Use `that` for restrictive clauses and `which` with a comma for nonrestrictive clauses. Write `the file that failed` and `the installer, which runs on Windows,`.
+- Hyphenate compound modifiers before a noun, but not after it, and never after an `-ly` adverb. Write `a well-known tool`, `the tool is well known`, and `a highly rated tool`.
+- Use lowercase after a colon unless a proper noun follows or the colon introduces two or more sentences. Write `The build failed: the token expired.`
+- Form possessives of names ending in `s` with `'s`, and of plurals ending in `s` with only an apostrophe. Write `James's commit` and `the users' settings`.
+- Follow `e.g.` and `i.e.` with a comma and keep them in parentheses or notes. In running text, write `for example` or `that is`.
+- Use an unspaced em dash for a break in a sentence and an en dash for number ranges. Write `passed—mostly—on Windows` and `pages 10–15`.
+- Omit periods in abbreviations. Write `US`, `PhD`, and `CEO`.
+- Spell out zero through nine and use numerals for 10 and up. Use numerals for all related numbers in the same context: `5 of the 12 builds`. Always use numerals with units and for versions, identifiers, decimals, and literal values. Spell out or reword a number that starts a sentence.
 
 # GitHub References
 - Never write a bare `#1416` outside GitHub. It hides whether the number is an issue or a PR, and which repository it belongs to.
