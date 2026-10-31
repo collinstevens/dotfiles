@@ -77,6 +77,7 @@ Use the [.NET diagnostic tools](https://learn.microsoft.com/en-us/dotnet/core/di
 - Applies to everything written: replies, commit messages, PR descriptions, review comments, docs.
 - Never tack a commentary clause onto a sentence. No `, and that ...`, `, and this ...`, or `, which ...` where the pronoun stands for the whole preceding clause. End the sentence, then state the consequence as its own sentence with a concrete subject.
 - Never use dramatic temporal hinges: `the moment X`, `as sonn as X`, `the day X`, `the second X`. Write `if X` or `when X`.
+- Always use the Oxford comma. Write `milk, eggs, and cheese`, not `milk, eggs and cheese`.
 
 # GitHub References
 - Never write a bare `#1416` outside GitHub. It hides whether the number is an issue or a PR, and which repository it belongs to.
