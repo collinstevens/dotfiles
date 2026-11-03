@@ -7,7 +7,8 @@ $miseExe = (Get-Command mise -CommandType Application -ErrorAction SilentlyConti
 if ($miseExe) {
     $miseCache = Join-Path $env:LOCALAPPDATA "mise-activate.cached.ps1"
     if (-not (Test-Path $miseCache) -or
-        (Get-Item $miseCache).LastWriteTime -lt (Get-Item $miseExe).LastWriteTime) {
+        (Get-Item $miseCache).LastWriteTime -lt (Get-Item $miseExe).LastWriteTime -or
+        -not (Select-String -Path $miseCache -Pattern $miseExe -SimpleMatch -Quiet)) {
         & $miseExe activate pwsh | Where-Object { $_ -ne '_mise_hook' -and $_ -notmatch '^\$\{Env:(Path|__MISE_ORIG_PATH)\}=' } | Set-Content $miseCache
     }
     . $miseCache
