@@ -102,9 +102,9 @@ mise_tools=(
 
 mise use --global "${mise_tools[@]/%/@latest}"
 for mise_tool in "${mise_tools[@]}"; do
-    mise config set --global "tools.$mise_tool.auto_update" true
+    mise config set --global "tools.$mise_tool.auto_update" false
 done
-mise settings set self_update.auto true
+mise settings unset self_update.auto
 
 mise exec dotnet@latest -- dotnet tool install --global dotnet-counters --allow-roll-forward
 mise exec dotnet@latest -- dotnet tool install --global dotnet-coverage --allow-roll-forward

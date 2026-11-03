@@ -41,7 +41,7 @@ The shared config sets `core.safecrlf=warn` to warn about irreversible line-endi
 The repo root `AGENTS.md` provides project guidance and is **not** installed. Maintain shared cross-project instructions in `shared/AGENTS.md`; all platform installers copy it to `$HOME/.codex/AGENTS.md`, `$HOME/.grok/AGENTS.md`, and `$HOME/.claude/CLAUDE.md`.
 
 ### Global mise tools
-Each platform installer lists the global tools in `miseTools` or `mise_tools`, runs `mise use --global` with `@latest` for each, and sets `auto_update = true` on each entry with `mise config set --global`. Keep the three lists identical. Mise never auto-updates exact versions, so an entry must stay on `latest` to keep updating. `mise use` preserves `auto_update` on rerun, and tools outside the list are left alone. Mise holds new releases for its default 24-hour `minimum_release_age`. The installers also set `self_update.auto = true`, so mise updates itself on its default 7-day `self_update.check_duration`.
+Each platform installer lists the global tools in `miseTools` or `mise_tools`, runs `mise use --global` with `@latest` for each, and sets `auto_update = false` on each entry with `mise config set --global`. Keep the three lists identical. Automatic updates are disabled because the update check blocks the first shell of the day. The installers also unset `self_update.auto` for the same reason. Rerun an installer to update the tools, and run `mise self-update` to update mise itself. Tools outside the list are left alone.
 
 Install mise with its official script, never a package manager: `irm https://mise.run/powershell | iex` on Windows and `curl -fsSL https://mise.run | sh` on Linux and macOS. Both place it in `$HOME/.local/bin`.
 
