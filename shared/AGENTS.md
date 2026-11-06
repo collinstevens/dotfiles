@@ -2,7 +2,12 @@
 
 - Don't push to main/master unless asked, branches are chill though.
 - Unless the user says otherwise, when asked to push, usually assume that means a branch if you're currently on main/master, and create a PR if there's not already one for the branch.
-- When squashing, rebasing, amending, or otherwise rewriting the user's commits, sign the resulting commits again. This includes root commits. Ensure the chosen tool enables signing; Git plumbing commands such as `git commit-tree` require explicit `-S` and do not honor `commit.gpgsign`.
+- Commit signing is automatic. `commit.gpgsign` signs every commit made by `git commit`, `git commit --amend`, `git rebase`, `git cherry-pick`, and `git merge`. Never check signatures after these commands, and never check signatures on commits you didn't create.
+- Some tools write commits without signing them: `git commit-tree` without `-S`, `git filter-branch`, `git filter-repo`, `git fast-import`, and custom history-rewrite scripts. Prefer the porcelain commands above. If you rewrote commits with one of these tools, list any unsigned commits in the rewritten range before pushing. The check reads the signature header and skips verification, so it needs no allowed-signers file:
+  ```sh
+  git rev-list <base>..HEAD | while read c; do git cat-file -p "$c" | grep -q '^gpgsig' || echo "$c"; done
+  ```
+  No output means every rewritten commit is signed. Re-sign any listed commit with `git rebase --exec 'git commit --amend --no-edit -S' <base>`, or add `--root` instead of `<base>` when the range includes the root commit. Don't use `git log --show-signature`, `git verify-commit`, or `%G?` for this check. Their output comes from verification and reports signed commits as unsigned when no allowed-signers file is configured.
 - Keep a local recovery reference before rewriting published history. When pushing rewritten history is authorized, use `--force-with-lease=<ref>:<expected-remote-commit>` with an explicit expected remote commit.
 - Use conventional commits https://www.conventionalcommits.org/en/v1.0.0
 
