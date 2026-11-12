@@ -312,11 +312,13 @@ Update-ProcessPath
 $env:Path = (Join-Path $miseDataDirectory "dotnet-root") + ";" + $env:Path
 
 $miseTools = @(
+    "aqua:temporalio/cli",
     "aspire",
     "aube",
     "bun",
     "dotnet",
     "git-lfs",
+    "github:temporalio/cloud-cli",
     "java",
     "jq",
     "node",

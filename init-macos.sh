@@ -131,11 +131,13 @@ fi
 mise --version
 
 mise_tools=(
+    aqua:temporalio/cli
     aspire
     aube
     bun
     dotnet
     git-lfs
+    github:temporalio/cloud-cli
     java
     jq
     node
