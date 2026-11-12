@@ -254,6 +254,34 @@ foreach ($githubKey in @(
     }
 }
 
+$githubHostKeys = @(& gh.exe api meta --jq ".ssh_keys[]")
+if ($LASTEXITCODE -ne 0 -or $githubHostKeys.Count -eq 0) {
+    Write-Error "Error: unable to read the GitHub SSH host keys"
+    exit 1
+}
+$knownHostsPath = Join-Path $HOME ".ssh\known_hosts"
+$knownHosts = if (Test-Path -LiteralPath $knownHostsPath) { [IO.File]::ReadAllText($knownHostsPath) } else { "" }
+$knownHostLines = @($knownHosts -split '\r?\n')
+$missingGitHubHostKeys = @($githubHostKeys | ForEach-Object { "github.com $_" } | Where-Object { $knownHostLines -notcontains $_ })
+if ($missingGitHubHostKeys.Count -gt 0) {
+    $separator = if ($knownHosts.Length -gt 0 -and -not $knownHosts.EndsWith("`n")) { "`n" } else { "" }
+    [IO.File]::AppendAllText($knownHostsPath, $separator + ($missingGitHubHostKeys -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
+    Write-Host "Added GitHub SSH host keys -> $knownHostsPath"
+}
+
+$originUrl = & git.exe -C $PSScriptRoot remote get-url origin 2>$null
+if ($LASTEXITCODE -eq 0 -and $originUrl -match '^https://github\.com/([^/]+/[^/]+?)(\.git)?/?$') {
+    $sshOriginUrl = "git@github.com:$($Matches[1]).git"
+    & git.exe -C $PSScriptRoot remote set-url origin $sshOriginUrl
+    & git.exe -C $PSScriptRoot ls-remote --exit-code origin HEAD *> $null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "Switched origin to SSH: $sshOriginUrl"
+    } else {
+        & git.exe -C $PSScriptRoot remote set-url origin $originUrl
+        Write-Warning "Unable to reach $sshOriginUrl; keeping origin at $originUrl"
+    }
+}
+
 Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
 Install-WingetPackage -Id "Microsoft.PowerToys" -Name "PowerToys"
 

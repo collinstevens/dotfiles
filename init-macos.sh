@@ -92,6 +92,35 @@ for github_key in authentication:user/keys signing:user/ssh_signing_keys; do
     fi
 done
 
+github_host_keys="$(gh api meta --jq '.ssh_keys[]')"
+if [ -z "$github_host_keys" ]; then
+    echo "Error: unable to read the GitHub SSH host keys" >&2
+    exit 1
+fi
+known_hosts="$HOME/.ssh/known_hosts"
+(umask 077; touch "$known_hosts")
+while IFS= read -r github_host_key; do
+    if ! grep -Fqx -- "github.com $github_host_key" "$known_hosts"; then
+        if [ -s "$known_hosts" ] && [ -n "$(tail -c 1 "$known_hosts")" ]; then
+            printf '\n' >> "$known_hosts"
+        fi
+        printf 'github.com %s\n' "$github_host_key" >> "$known_hosts"
+        echo "Added GitHub SSH host key -> $known_hosts"
+    fi
+done <<< "$github_host_keys"
+
+origin_url="$(git -C "$SCRIPT_DIR" remote get-url origin 2>/dev/null || true)"
+if [[ "$origin_url" =~ ^https://github\.com/([^/]+/[^/]+)$ ]]; then
+    ssh_origin_url="git@github.com:${BASH_REMATCH[1]%.git}.git"
+    git -C "$SCRIPT_DIR" remote set-url origin "$ssh_origin_url"
+    if git -C "$SCRIPT_DIR" ls-remote --exit-code origin HEAD >/dev/null 2>&1; then
+        echo "Switched origin to SSH: $ssh_origin_url"
+    else
+        git -C "$SCRIPT_DIR" remote set-url origin "$origin_url"
+        echo "Warning: unable to reach $ssh_origin_url; keeping origin at $origin_url" >&2
+    fi
+fi
+
 if ! command -v tmux >/dev/null 2>&1; then
     brew install tmux
 fi
