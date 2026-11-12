@@ -69,6 +69,29 @@ if ! gh stack --help >/dev/null 2>&1; then
     fi
 fi
 
+github_key_scopes="admin:public_key,admin:ssh_signing_key"
+if ! gh auth status --hostname github.com >/dev/null 2>&1; then
+    gh auth login --hostname github.com --git-protocol https --web --scopes "$github_key_scopes"
+fi
+if ! gh api user/keys --silent >/dev/null 2>&1 || ! gh api user/ssh_signing_keys --silent >/dev/null 2>&1; then
+    gh auth refresh --hostname github.com --scopes "$github_key_scopes"
+fi
+
+ssh_public_key_path="$HOME/.ssh/id_ed25519.pub"
+ssh_public_key="$(awk '{ print $1 " " $2 }' "$ssh_public_key_path")"
+ssh_key_title="$(awk '{ print $3 }' "$ssh_public_key_path")"
+if [ -z "$ssh_key_title" ]; then
+    ssh_key_title="$(id -un)-$(uname -n | cut -d. -f1)"
+    ssh_key_title="$(printf '%s' "$ssh_key_title" | tr '[:upper:]' '[:lower:]')"
+fi
+for github_key in authentication:user/keys signing:user/ssh_signing_keys; do
+    github_key_type="${github_key%%:*}"
+    registered_keys="$(gh api "${github_key#*:}" --paginate --jq '.[].key')"
+    if ! grep -Fqx -- "$ssh_public_key" <<< "$registered_keys"; then
+        gh ssh-key add "$ssh_public_key_path" --title "$ssh_key_title" --type "$github_key_type"
+    fi
+done
+
 if ! command -v tmux >/dev/null 2>&1; then
     brew install tmux
 fi

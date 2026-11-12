@@ -210,6 +210,50 @@ if ($LASTEXITCODE -ne 0) {
     }
 }
 
+$githubKeyScopes = "admin:public_key,admin:ssh_signing_key"
+& gh.exe auth status --hostname github.com *> $null
+if ($LASTEXITCODE -ne 0) {
+    & gh.exe auth login --hostname github.com --git-protocol https --web --scopes $githubKeyScopes
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Error: unable to log in to GitHub with gh"
+        exit 1
+    }
+}
+
+& gh.exe api user/keys --silent *> $null
+$hasAuthenticationKeyScope = $LASTEXITCODE -eq 0
+& gh.exe api user/ssh_signing_keys --silent *> $null
+$hasSigningKeyScope = $LASTEXITCODE -eq 0
+if (-not ($hasAuthenticationKeyScope -and $hasSigningKeyScope)) {
+    & gh.exe auth refresh --hostname github.com --scopes $githubKeyScopes
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Error: unable to grant gh the SSH key scopes"
+        exit 1
+    }
+}
+
+$sshPublicKeyPath = Join-Path $HOME ".ssh\id_ed25519.pub"
+$sshPublicKeyFields = @((Get-Content -Raw -LiteralPath $sshPublicKeyPath).Trim() -split '\s+')
+$sshPublicKey = "$($sshPublicKeyFields[0]) $($sshPublicKeyFields[1])"
+$sshKeyTitle = if ($sshPublicKeyFields.Count -gt 2) { $sshPublicKeyFields[2] } else { "$env:USERNAME-$env:COMPUTERNAME".ToLowerInvariant() }
+foreach ($githubKey in @(
+    @{ Type = "authentication"; Endpoint = "user/keys" },
+    @{ Type = "signing"; Endpoint = "user/ssh_signing_keys" }
+)) {
+    $registeredKeys = @(& gh.exe api $githubKey.Endpoint --paginate --jq ".[].key")
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Error: unable to list GitHub $($githubKey.Type) keys"
+        exit 1
+    }
+    if ($registeredKeys -notcontains $sshPublicKey) {
+        & gh.exe ssh-key add $sshPublicKeyPath --title $sshKeyTitle --type $githubKey.Type
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Error: unable to add $sshPublicKeyPath to GitHub as a $($githubKey.Type) key"
+            exit 1
+        }
+    }
+}
+
 Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
 Install-WingetPackage -Id "Microsoft.PowerToys" -Name "PowerToys"
 
