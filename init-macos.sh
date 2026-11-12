@@ -1,7 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+script_source="${BASH_SOURCE[0]:-}"
+dotfiles_repository="${DOTFILES_REPOSITORY:-https://github.com/collinstevens/dotfiles.git}"
+dotfiles_dir="${DOTFILES_DIR:-$HOME/projects/collinstevens/dotfiles}"
 
 mkdir -p "$HOME/.local/bin"
 export PATH="$HOME/.local/bin:$PATH"
@@ -29,6 +31,32 @@ fi
 if ! git --version >/dev/null 2>&1; then
     brew install git
 fi
+
+ssh_key="$HOME/.ssh/id_ed25519"
+if [ ! -e "$ssh_key" ]; then
+    mkdir -p "$(dirname "$ssh_key")"
+    chmod 700 "$(dirname "$ssh_key")"
+    ssh_key_comment="$(id -un)-$(uname -n | cut -d. -f1)"
+    ssh-keygen -t ed25519 -f "$ssh_key" -C "$(printf '%s' "$ssh_key_comment" | tr '[:upper:]' '[:lower:]')" -N ""
+    echo "Created SSH key: $ssh_key.pub"
+fi
+
+if [ -z "$script_source" ] || [ ! -f "$script_source" ]; then
+    if [ -e "$dotfiles_dir/.git" ]; then
+        if ! git -C "$dotfiles_dir" pull --ff-only; then
+            echo "Warning: unable to update $dotfiles_dir; continuing with the existing checkout" >&2
+        fi
+    elif [ -e "$dotfiles_dir" ]; then
+        echo "Error: $dotfiles_dir already exists and is not a Git checkout" >&2
+        exit 1
+    else
+        mkdir -p "$(dirname "$dotfiles_dir")"
+        git clone "$dotfiles_repository" "$dotfiles_dir"
+    fi
+    exec bash "$dotfiles_dir/init-macos.sh"
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$script_source")" && pwd)"
 
 if ! command -v gh >/dev/null 2>&1; then
     brew install gh
@@ -142,6 +170,10 @@ load_launchagent() {
     mkdir -p "$(dirname "$target")"
     cp "$source_file" "$target"
     launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
+    for _ in 1 2 3 4 5 6 7 8 9 10; do
+        launchctl print "gui/$(id -u)/$label" >/dev/null 2>&1 || break
+        sleep 0.5
+    done
     launchctl bootstrap "gui/$(id -u)" "$target"
     echo "Loaded: $label"
 }

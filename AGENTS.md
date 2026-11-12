@@ -12,16 +12,21 @@ Commit and push changes directly to `master` for this dotfiles repository. Do no
 
 ## Installing
 
-- Windows (PowerShell): `./init-windows.ps1`
-- Linux / WSL: `./init-linux.sh`
-- macOS: `./init-macos.sh`
+Each installer also bootstraps a fresh machine, so the README documents one command per platform that downloads and runs it:
 
-On a fresh machine, the bootstrap scripts install the prerequisites, create `$HOME/.ssh/id_ed25519` if it does not exist, clone this repository over HTTPS into `$HOME/projects/collinstevens/dotfiles`, and run the platform installer. A rerun fast-forwards an existing checkout instead. The key has no passphrase, and its comment is `user-hostname` in lowercase, matching the `ssh-keys/` naming. The bootstrap does not add the key to `ssh-keys/` or GitHub. `DOTFILES_DIR` overrides the checkout location, and `DOTFILES_REPOSITORY` overrides the clone URL.
+- Windows (elevated Windows PowerShell or PowerShell): `irm https://raw.githubusercontent.com/collinstevens/dotfiles/master/init-windows.ps1 | iex`
+- Linux / WSL: `bash -c "$(curl -fsSL https://raw.githubusercontent.com/collinstevens/dotfiles/master/init-linux.sh)"`
+- macOS: `bash -c "$(curl -fsSL https://raw.githubusercontent.com/collinstevens/dotfiles/master/init-macos.sh)"`
 
-- Windows (elevated Windows PowerShell or PowerShell): `irm https://raw.githubusercontent.com/collinstevens/dotfiles/master/bootstrap.ps1 | iex`
-- Linux / WSL / macOS: `bash -c "$(curl -fsSL https://raw.githubusercontent.com/collinstevens/dotfiles/master/bootstrap.sh)"`
+From an existing checkout, run `./init-windows.ps1`, `./init-linux.sh`, or `./init-macos.sh`.
 
-`bootstrap.ps1` must stay compatible with Windows PowerShell 5.1 and runnable through `Invoke-Expression`. It registers winget if needed, installs Git with winget, installs the latest PowerShell LTS MSI from the PowerShell GitHub releases when `pwsh` is missing, and runs `init-windows.ps1` under `pwsh`. Never install PowerShell with winget or the Microsoft Store. Those install the MSIX package, whose `$PSHOME` is read-only, so `init-windows.ps1` cannot install `$PROFILE.AllUsersAllHosts`. PowerShell 7.7 and later ship no MSI, so the MSI install stays on the 7.6 LTS line. The MSI opts into Microsoft Update for patch releases. `init-windows.ps1` adds a blocking winget pin on `Microsoft.PowerShell` so `winget upgrade --all` cannot replace the MSI with the MSIX. It wraps everything in a script block and uses `throw` instead of `exit` so a failure does not close the caller's window. `bootstrap.sh` installs Git and curl with the system package manager on Linux and installs Homebrew and Git on macOS. It must be run through `bash -c "$(...)"` rather than piped into `bash`, so later prompts read from the terminal instead of the script. `init-macos.sh` also installs Homebrew if it is missing.
+Every installer must stay idempotent: a rerun on a configured machine must succeed and leave it in the same state. Guard installs with a presence check, deduplicate appended lines, and replace copied files rather than appending to them.
+
+Each installer starts with a bootstrap section. It installs Git and the other prerequisites and creates `$HOME/.ssh/id_ed25519` without a passphrase if it does not exist. The key's comment is `user-hostname` in lowercase, matching the `ssh-keys/` naming. The bootstrap does not add the key to `ssh-keys/` or GitHub. When the installer is not running from a file, as with `iex` or `bash -c`, the bootstrap clones this repository over HTTPS into `$HOME/projects/collinstevens/dotfiles` and runs the checkout's copy of the installer. An existing checkout is fast-forwarded instead; if that fails, the installer warns and continues with the checkout as it is. `DOTFILES_DIR` overrides the checkout location, and `DOTFILES_REPOSITORY` overrides the clone URL. The Unix installers must be run through `bash -c "$(...)"` rather than piped into `bash`, so prompts read from the terminal instead of the script.
+
+The bootstrap section of `init-windows.ps1` must stay compatible with Windows PowerShell 5.1 and with `Invoke-Expression`, which parses the whole file first. Keep it in script blocks that `throw` rather than `exit`, so a failure does not close the caller's window and no variables leak into the caller's session. It requires an elevated session, registers winget if needed, installs Git with winget, and installs the latest PowerShell LTS MSI from the PowerShell GitHub releases when `pwsh` is missing. Run from Windows PowerShell, it hands off to `pwsh`. Never install PowerShell with winget or the Microsoft Store. Those install the MSIX package, whose `$PSHOME` is read-only, so `init-windows.ps1` cannot install `$PROFILE.AllUsersAllHosts`. PowerShell 7.7 and later ship no MSI, so the MSI install stays on the 7.6 LTS line. The MSI opts into Microsoft Update for patch releases. `init-windows.ps1` adds a blocking winget pin on `Microsoft.PowerShell` so `winget upgrade --all` cannot replace the MSI with the MSIX.
+
+`init-linux.sh` installs Git, curl, and `ssh-keygen` with the system package manager. `init-macos.sh` installs Homebrew if it is missing, then Git.
 
 The scripts **copy** (not symlink) files listed in `links` to their targets, removing existing targets first. System files, LaunchAgents, imported preferences, and merged configuration have separate installation steps. After editing a dotfile here, re-run the relevant installer to propagate the change. Add ordinary copied dotfiles to the applicable installer's `links` collection; Linux system files belong in `system_files`, and other resources need their corresponding installation step.
 

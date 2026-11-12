@@ -1,7 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+script_source="${BASH_SOURCE[0]:-}"
+dotfiles_repository="${DOTFILES_REPOSITORY:-https://github.com/collinstevens/dotfiles.git}"
+dotfiles_dir="${DOTFILES_DIR:-$HOME/projects/collinstevens/dotfiles}"
 
 mkdir -p "$HOME/.local/bin"
 export PATH="$HOME/.local/bin:$PATH"
@@ -23,6 +25,9 @@ install_system_package() {
     fi
 
     if command -v apt-get >/dev/null 2>&1; then
+        if [ "$command_name" = "ssh-keygen" ]; then
+            package_name="openssh-client"
+        fi
         if [ "$command_name" = "gh" ]; then
             run_as_root apt-get update
             run_as_root apt-get install -y ca-certificates curl
@@ -42,17 +47,27 @@ install_system_package() {
         run_as_root apt-get update
         run_as_root apt-get install -y "$package_name"
     elif command -v dnf >/dev/null 2>&1; then
+        if [ "$command_name" = "ssh-keygen" ]; then
+            package_name="openssh-clients"
+        fi
         run_as_root dnf install -y "$package_name"
     elif command -v pacman >/dev/null 2>&1; then
         if [ "$command_name" = "gh" ]; then
             package_name="github-cli"
+        elif [ "$command_name" = "ssh-keygen" ]; then
+            package_name="openssh"
         fi
         run_as_root pacman -S --needed --noconfirm "$package_name"
     elif command -v zypper >/dev/null 2>&1; then
+        if [ "$command_name" = "ssh-keygen" ]; then
+            package_name="openssh-clients"
+        fi
         run_as_root zypper --non-interactive install "$package_name"
     elif command -v apk >/dev/null 2>&1; then
         if [ "$command_name" = "gh" ]; then
             package_name="github-cli"
+        elif [ "$command_name" = "ssh-keygen" ]; then
+            package_name="openssh-keygen"
         fi
         run_as_root apk add "$package_name"
     else
@@ -67,6 +82,35 @@ install_system_package() {
 }
 
 install_system_package git
+install_system_package curl
+install_system_package ssh-keygen
+
+ssh_key="$HOME/.ssh/id_ed25519"
+if [ ! -e "$ssh_key" ]; then
+    mkdir -p "$(dirname "$ssh_key")"
+    chmod 700 "$(dirname "$ssh_key")"
+    ssh_key_comment="$(id -un)-$(uname -n | cut -d. -f1)"
+    ssh-keygen -t ed25519 -f "$ssh_key" -C "$(printf '%s' "$ssh_key_comment" | tr '[:upper:]' '[:lower:]')" -N ""
+    echo "Created SSH key: $ssh_key.pub"
+fi
+
+if [ -z "$script_source" ] || [ ! -f "$script_source" ]; then
+    if [ -e "$dotfiles_dir/.git" ]; then
+        if ! git -C "$dotfiles_dir" pull --ff-only; then
+            echo "Warning: unable to update $dotfiles_dir; continuing with the existing checkout" >&2
+        fi
+    elif [ -e "$dotfiles_dir" ]; then
+        echo "Error: $dotfiles_dir already exists and is not a Git checkout" >&2
+        exit 1
+    else
+        mkdir -p "$(dirname "$dotfiles_dir")"
+        git clone "$dotfiles_repository" "$dotfiles_dir"
+    fi
+    exec bash "$dotfiles_dir/init-linux.sh"
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$script_source")" && pwd)"
+
 install_system_package gh
 
 if ! gh stack --help >/dev/null 2>&1; then
@@ -77,7 +121,6 @@ if ! gh stack --help >/dev/null 2>&1; then
 fi
 
 install_system_package tmux
-install_system_package curl
 
 if ! command -v mise >/dev/null 2>&1; then
     curl -fsSL https://mise.run | sh
