@@ -118,6 +118,14 @@ if ! command -v yq >/dev/null 2>&1; then
     brew install yq
 fi
 
+if ! command -v claude >/dev/null 2>&1; then
+    curl -fsSL https://claude.ai/install.sh | bash
+    if ! command -v claude >/dev/null 2>&1; then
+        echo "Error: Claude Code was installed but claude is not available" >&2
+        exit 1
+    fi
+fi
+
 links=(
     ".zshrc:$HOME/.zshrc"
     ".zprofile:$HOME/.zprofile"

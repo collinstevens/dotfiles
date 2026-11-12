@@ -184,6 +184,14 @@ for profile in "$HOME/.profile" "$bash_login_profile"; do
     fi
 done
 
+if ! command -v claude >/dev/null 2>&1; then
+    curl -fsSL https://claude.ai/install.sh | bash
+    if ! command -v claude >/dev/null 2>&1; then
+        echo "Error: Claude Code was installed but claude is not available" >&2
+        exit 1
+    fi
+fi
+
 links=(
     ".bashrc:$HOME/.bashrc"
     ".tmux.conf:$HOME/.tmux.conf"

@@ -367,6 +367,19 @@ if (-not $hackInstalled) {
     }
 }
 
+if (-not (Get-Command claude.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+    & pwsh.exe -NoProfile -ExecutionPolicy Bypass -Command "irm https://claude.ai/install.ps1 | iex"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Error: unable to install Claude Code"
+        exit 1
+    }
+    Update-ProcessPath
+    if (-not (Get-Command claude.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+        Write-Error "Error: Claude Code was installed but claude.exe is not available"
+        exit 1
+    }
+}
+
 $links = @(
     @{ Source = ".gitconfig"; Target = "$HOME\.gitconfig" },
     @{ Source = ".gitconfig-windows"; Target = "$HOME\.gitconfig-windows" },
