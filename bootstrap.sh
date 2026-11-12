@@ -76,7 +76,7 @@ if [ ! -e "$ssh_key" ]; then
     mkdir -p "$(dirname "$ssh_key")"
     chmod 700 "$(dirname "$ssh_key")"
     ssh_key_comment="$(id -un)-$(uname -n | cut -d. -f1)"
-    ssh-keygen -t ed25519 -f "$ssh_key" -C "$(printf '%s' "$ssh_key_comment" | tr '[:upper:]' '[:lower:]')"
+    ssh-keygen -t ed25519 -f "$ssh_key" -C "$(printf '%s' "$ssh_key_comment" | tr '[:upper:]' '[:lower:]')" -N ""
     echo "Created SSH key: $ssh_key.pub"
 fi
 

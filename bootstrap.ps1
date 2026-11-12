@@ -55,7 +55,8 @@
         }
         New-Item -ItemType Directory -Path (Split-Path -Parent $sshKeyPath) -Force | Out-Null
         $sshKeyComment = "$env:USERNAME-$env:COMPUTERNAME".ToLowerInvariant()
-        & ssh-keygen.exe -t ed25519 -f $sshKeyPath -C $sshKeyComment
+        $PSNativeCommandArgumentPassing = "Legacy"
+        & ssh-keygen.exe -t ed25519 -f $sshKeyPath -C $sshKeyComment -N '""'
         if ($LASTEXITCODE -ne 0) {
             throw "Unable to create $sshKeyPath"
         }
