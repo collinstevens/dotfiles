@@ -406,11 +406,15 @@ $links = @(
 )
 
 $pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
-if ($pkg) {
-    $wtSettingsTarget = Join-Path $env:LOCALAPPDATA "Packages\$($pkg.PackageFamilyName)\LocalState\settings.json"
-} else {
-    $wtSettingsTarget = Join-Path $env:LOCALAPPDATA "Microsoft\Windows Terminal\settings.json"
+if (-not $pkg) {
+    Install-WingetPackage -Id "Microsoft.WindowsTerminal" -Name "Windows Terminal"
+    $pkg = Get-AppxPackage -Name "Microsoft.WindowsTerminal" -ErrorAction SilentlyContinue
+    if (-not $pkg) {
+        Write-Error "Error: Windows Terminal was installed but its package is not registered"
+        exit 1
+    }
 }
+$wtSettingsTarget = Join-Path $env:LOCALAPPDATA "Packages\$($pkg.PackageFamilyName)\LocalState\settings.json"
 $links += @{ Source = "windows-terminal\settings.json"; Target = $wtSettingsTarget }
 
 foreach ($link in $links) {
