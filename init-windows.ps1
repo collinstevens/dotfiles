@@ -98,6 +98,12 @@ if ($LASTEXITCODE -ne 0) {
 Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
 Install-WingetPackage -Id "Microsoft.PowerToys" -Name "PowerToys"
 
+& winget.exe pin add --id Microsoft.PowerShell --exact --source winget --blocking --force --accept-source-agreements
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Error: unable to block winget upgrades of PowerShell"
+    exit 1
+}
+
 if (-not (Get-Command mise.exe -CommandType Application -ErrorAction SilentlyContinue)) {
     Invoke-RestMethod https://mise.run/powershell | Invoke-Expression
     Update-ProcessPath
