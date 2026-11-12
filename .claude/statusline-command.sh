@@ -39,7 +39,7 @@ if [ -n "$model" ]; then
 fi
 
 [ -n "$permission_mode" ] && segments+=("${mauve}${permission_mode}${reset}")
-segments+=("${peach}Context ${context_used}% used${reset}")
+segments+=("${peach}context ${context_used}% used${reset}")
 [ -n "$five_hour_left" ] && segments+=("${red}5h ${five_hour_left}% left${reset}")
 [ -n "$weekly_left" ] && segments+=("${red}weekly ${weekly_left}% left${reset}")
 
