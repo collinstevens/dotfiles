@@ -16,6 +16,13 @@ Commit and push changes directly to `master` for this dotfiles repository. Do no
 - Linux / WSL: `./init-linux.sh`
 - macOS: `./init-macos.sh`
 
+On a fresh machine, the bootstrap scripts install the prerequisites, clone this repository over HTTPS into `$HOME/projects/collinstevens/dotfiles`, and run the platform installer. A rerun fast-forwards an existing checkout instead. `DOTFILES_DIR` overrides the checkout location, and `DOTFILES_REPOSITORY` overrides the clone URL.
+
+- Windows (elevated Windows PowerShell or PowerShell): `irm https://raw.githubusercontent.com/collinstevens/dotfiles/master/bootstrap.ps1 | iex`
+- Linux / WSL / macOS: `bash -c "$(curl -fsSL https://raw.githubusercontent.com/collinstevens/dotfiles/master/bootstrap.sh)"`
+
+`bootstrap.ps1` must stay compatible with Windows PowerShell 5.1 and runnable through `Invoke-Expression`. It registers winget if needed, installs Git and PowerShell 7 with winget, and runs `init-windows.ps1` under `pwsh`. It wraps everything in a script block and uses `throw` instead of `exit` so a failure does not close the caller's window. `bootstrap.sh` installs Git and curl with the system package manager on Linux and installs Homebrew and Git on macOS. It must be run through `bash -c "$(...)"` rather than piped into `bash`, so later prompts read from the terminal instead of the script. `init-macos.sh` also installs Homebrew if it is missing.
+
 The scripts **copy** (not symlink) files listed in `links` to their targets, removing existing targets first. System files, LaunchAgents, imported preferences, and merged configuration have separate installation steps. After editing a dotfile here, re-run the relevant installer to propagate the change. Add ordinary copied dotfiles to the applicable installer's `links` collection; Linux system files belong in `system_files`, and other resources need their corresponding installation step.
 
 The Windows and macOS installers install native `yq` if needed. The Linux installer uses the mise `yq` through `mise exec yq@latest`. All installers invoke `.codex/configure.ps1` or `.codex/configure.sh` to merge `.codex/managed-config.toml` and `.codex/permissions.toml` into `$HOME/.codex/config.toml`. The merge preserves unrelated machine-specific settings, replaces managed values, removes the legacy `sandbox_workspace_write` table, and rebuilds `permissions.workspace_gitignore` with the target machine's Git ignore path. The full machine-specific config is not stored in this repository.

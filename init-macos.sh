@@ -6,6 +6,26 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 mkdir -p "$HOME/.local/bin"
 export PATH="$HOME/.local/bin:$PATH"
 
+load_homebrew() {
+    local brew_path
+    for brew_path in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+        if [ -x "$brew_path" ]; then
+            eval "$("$brew_path" shellenv)"
+            return 0
+        fi
+    done
+    return 1
+}
+
+if ! command -v brew >/dev/null 2>&1 && ! load_homebrew; then
+    sudo -v
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if ! load_homebrew; then
+        echo "Error: Homebrew was installed but brew is not available" >&2
+        exit 1
+    fi
+fi
+
 if ! git --version >/dev/null 2>&1; then
     brew install git
 fi

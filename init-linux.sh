@@ -77,6 +77,7 @@ if ! gh stack --help >/dev/null 2>&1; then
 fi
 
 install_system_package tmux
+install_system_package curl
 
 if ! command -v mise >/dev/null 2>&1; then
     curl -fsSL https://mise.run | sh
