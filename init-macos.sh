@@ -166,10 +166,6 @@ mise exec dotnet@latest -- dotnet tool install --global dotnet-debugger-extensio
 mise exec dotnet@latest -- dotnet tool install --global dotnet-sos --allow-roll-forward
 mise exec dotnet@latest -- dotnet tool install --global dotnet-dsrouter --allow-roll-forward
 
-if ! command -v yq >/dev/null 2>&1; then
-    brew install yq
-fi
-
 if ! command -v claude >/dev/null 2>&1; then
     curl -fsSL https://claude.ai/install.sh | bash
     if ! command -v claude >/dev/null 2>&1; then
@@ -243,7 +239,7 @@ load_launchagent com.collin.swap-fn-ctrl
 defaults import com.googlecode.iterm2 "$SCRIPT_DIR/iterm2/com.googlecode.iterm2.plist"
 echo "Imported: iterm2/com.googlecode.iterm2.plist -> com.googlecode.iterm2"
 
-bash "$SCRIPT_DIR/.codex/configure.sh"
+mise exec yq@latest -- bash "$SCRIPT_DIR/.codex/configure.sh"
 bash "$SCRIPT_DIR/.claude/configure-mcp.sh"
 bash "$SCRIPT_DIR/ssh-keys/authorize.sh"
 

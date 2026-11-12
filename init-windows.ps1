@@ -282,7 +282,6 @@ if ($LASTEXITCODE -eq 0 -and $originUrl -match '^https://github\.com/([^/]+/[^/]
     }
 }
 
-Install-WingetPackage -Id "MikeFarah.yq" -Command "yq" -Name "yq"
 Install-WingetPackage -Id "Microsoft.PowerToys" -Name "PowerToys"
 
 & winget.exe pin add --id Microsoft.PowerShell --exact --source winget --blocking --force --accept-source-agreements
@@ -514,7 +513,10 @@ foreach ($link in $links) {
 $noAgentSummaryPreload = (Join-Path $HOME ".claude\no-agent-summary.js").Replace('\', '/')
 [Environment]::SetEnvironmentVariable("BUN_OPTIONS", "--preload $noAgentSummaryPreload", "User")
 
-& (Join-Path $PSScriptRoot ".codex\configure.ps1")
+& mise.exe exec yq@latest -- (Get-Process -Id $PID).Path -NoProfile -File (Join-Path $PSScriptRoot ".codex\configure.ps1")
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to merge Codex settings"
+}
 & (Join-Path $PSScriptRoot ".claude\configure-mcp.ps1")
 & (Join-Path $PSScriptRoot "ssh-keys\authorize.ps1")
 
