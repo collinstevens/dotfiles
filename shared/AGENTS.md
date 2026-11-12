@@ -47,6 +47,11 @@
 # mise
 
 - On Windows, use `mise.exe`, not `mise`.
+- These tools are installed globally through mise at their latest versions, so they are available in every directory. Project `mise.toml` files can pin other versions.
+  - Languages and runtimes: `bun`, `dotnet` (the .NET SDK), `java`, `node`, and `python`.
+  - Package managers: `aube`, `npm`, and `pnpm`.
+  - Other CLIs: `aspire`, `git-lfs`, `jq`, `rg`, `wrangler` (from `npm:wrangler`), and `yq`.
+- Global tools don't update automatically. Run `mise upgrade --global` to update them.
 
 # .NET Guidance
 
