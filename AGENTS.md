@@ -16,7 +16,7 @@ Commit and push changes directly to `master` for this dotfiles repository. Do no
 - Linux / WSL: `./init-linux.sh`
 - macOS: `./init-macos.sh`
 
-On a fresh machine, the bootstrap scripts install the prerequisites, clone this repository over HTTPS into `$HOME/projects/collinstevens/dotfiles`, and run the platform installer. A rerun fast-forwards an existing checkout instead. `DOTFILES_DIR` overrides the checkout location, and `DOTFILES_REPOSITORY` overrides the clone URL.
+On a fresh machine, the bootstrap scripts install the prerequisites, create `$HOME/.ssh/id_ed25519` if it does not exist, clone this repository over HTTPS into `$HOME/projects/collinstevens/dotfiles`, and run the platform installer. A rerun fast-forwards an existing checkout instead. `ssh-keygen` prompts for a passphrase and comments the key as `user-hostname` in lowercase, matching the `ssh-keys/` naming. The bootstrap does not add the key to `ssh-keys/` or GitHub. `DOTFILES_DIR` overrides the checkout location, and `DOTFILES_REPOSITORY` overrides the clone URL.
 
 - Windows (elevated Windows PowerShell or PowerShell): `irm https://raw.githubusercontent.com/collinstevens/dotfiles/master/bootstrap.ps1 | iex`
 - Linux / WSL / macOS: `bash -c "$(curl -fsSL https://raw.githubusercontent.com/collinstevens/dotfiles/master/bootstrap.sh)"`

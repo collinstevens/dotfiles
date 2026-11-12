@@ -47,6 +47,21 @@
         }
     }
 
+    $sshKeyPath = Join-Path $HOME ".ssh\id_ed25519"
+    if (-not (Test-Path -LiteralPath $sshKeyPath)) {
+        if (-not (Test-Application "ssh-keygen.exe")) {
+            Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0 | Out-Null
+            Update-ProcessPath
+        }
+        New-Item -ItemType Directory -Path (Split-Path -Parent $sshKeyPath) -Force | Out-Null
+        $sshKeyComment = "$env:USERNAME-$env:COMPUTERNAME".ToLowerInvariant()
+        & ssh-keygen.exe -t ed25519 -f $sshKeyPath -C $sshKeyComment
+        if ($LASTEXITCODE -ne 0) {
+            throw "Unable to create $sshKeyPath"
+        }
+        Write-Host "Created SSH key: $sshKeyPath.pub"
+    }
+
     Install-WingetPackage -Id "Git.Git" -Command "git.exe"
     Install-WingetPackage -Id "Microsoft.PowerShell" -Command "pwsh.exe"
 

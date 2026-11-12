@@ -22,7 +22,7 @@ Without curl:
 bash -c "$(wget -qO- https://raw.githubusercontent.com/collinstevens/dotfiles/master/bootstrap.sh)"
 ```
 
-The bootstrap installs Git and the other prerequisites, clones this repository into `~/projects/collinstevens/dotfiles`, and runs the platform installer. Set `DOTFILES_DIR` to clone somewhere else.
+The bootstrap installs Git and the other prerequisites, creates `~/.ssh/id_ed25519` if it does not exist, clones this repository into `~/projects/collinstevens/dotfiles`, and runs the platform installer. Set `DOTFILES_DIR` to clone somewhere else.
 
 ## Existing checkout
 
