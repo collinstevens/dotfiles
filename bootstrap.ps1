@@ -64,7 +64,30 @@
     }
 
     Install-WingetPackage -Id "Git.Git" -Command "git.exe"
-    Install-WingetPackage -Id "Microsoft.PowerShell" -Command "pwsh.exe"
+    if (-not (Test-Application "pwsh.exe")) {
+        $metadata = Invoke-RestMethod https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/metadata.json
+        $release = @($metadata.LTSReleaseTag)[0] -replace '^v'
+        $architecture = if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") { "arm64" } else { "x64" }
+        $packageName = "PowerShell-$release-win-$architecture.msi"
+        $downloadDirectory = Join-Path ([IO.Path]::GetTempPath()) ([IO.Path]::GetRandomFileName())
+        New-Item -ItemType Directory -Path $downloadDirectory | Out-Null
+        try {
+            $packagePath = Join-Path $downloadDirectory $packageName
+            Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/PowerShell/PowerShell/releases/download/v$release/$packageName" -OutFile $packagePath
+            $msiArguments = "/i `"$packagePath`" /quiet /norestart ADD_PATH=1 USE_MU=1 ENABLE_MU=1"
+            $process = Start-Process msiexec.exe -ArgumentList $msiArguments -Wait -PassThru
+            if ($process.ExitCode -notin 0, 3010) {
+                throw "Unable to install PowerShell $release (msiexec exit code $($process.ExitCode))"
+            }
+        } finally {
+            Remove-Item -LiteralPath $downloadDirectory -Recurse -Force
+        }
+
+        Update-ProcessPath
+        if (-not (Test-Application "pwsh.exe")) {
+            throw "PowerShell $release was installed but pwsh.exe is not available"
+        }
+    }
 
     if (Test-Path -LiteralPath (Join-Path $directory ".git")) {
         & git.exe -C $directory pull --ff-only
