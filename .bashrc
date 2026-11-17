@@ -77,6 +77,8 @@ alias l='ls -CF'
 alias cj='container=lxc firejail --profile=~/claude.firejail.profile --read-write=$PWD claude --dangerously-skip-permissions'
 alias cy='claude --dangerously-skip-permissions'
 alias cys='claude --dangerously-skip-permissions --setting-sources=user'
+alias cyc='claude --dangerously-skip-permissions --chrome'
+alias cysc='claude --dangerously-skip-permissions --setting-sources=user --chrome'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile

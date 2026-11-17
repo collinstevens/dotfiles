@@ -75,6 +75,14 @@ function global:cys {
     claude --dangerously-skip-permissions --setting-sources=user @args
 }
 
+function global:cyc {
+    claude --dangerously-skip-permissions --chrome @args
+}
+
+function global:cysc {
+    claude --dangerously-skip-permissions --setting-sources=user --chrome @args
+}
+
 function global:reloadenv {
     $machineEnvironment = [Environment]::GetEnvironmentVariables("Machine")
     $userEnvironment = [Environment]::GetEnvironmentVariables("User")

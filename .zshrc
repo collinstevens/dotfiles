@@ -30,6 +30,8 @@ cddir() {
 
 alias cy='claude --dangerously-skip-permissions'
 alias cys='claude --dangerously-skip-permissions --setting-sources=user'
+alias cyc='claude --dangerously-skip-permissions --chrome'
+alias cysc='claude --dangerously-skip-permissions --setting-sources=user --chrome'
 
 autoload -Uz compinit && compinit
 
